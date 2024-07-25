@@ -1,0 +1,13 @@
+.joze{
+    background-color:#c9c9c9;
+}
+.Joze_button{
+    background-image: url(../../../../public/image/go-to-light.svg);
+    background-position: center;
+    background-size: 100% 100%;
+    font-weight: bolder;
+    padding: 30px 0;
+    width: 25vw;
+    text-decoration: none;
+    background-repeat: no-repeat;
+}

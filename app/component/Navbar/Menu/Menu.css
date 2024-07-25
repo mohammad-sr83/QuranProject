@@ -1,0 +1,21 @@
+.menu{
+    transform: translate(0, 0);
+    box-shadow: 0 0 24px 12px rgba(0, 0, 0, 0.24);
+    z-index: 1;
+    
+}
+.btn{
+    border: 2px solid #EAF4F4;
+    outline: none;
+    padding: 7px 0;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    background-color: #c5e2e6;
+    transition: all 50ms;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.btn.active{
+    background-color:#758385;
+}
