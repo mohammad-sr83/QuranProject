@@ -15,10 +15,10 @@ export default function Main() {
       </div>
       <div>
         <h2 className='text-right p-3 text-2xl font-bold'>سوره و آیات</h2>
-        <div className='overflow-y-auto pr-1 flex justify-between gap-2 items-center flex-row '>
+        <div className='overflow-x-auto Scrool pr-1 flex justify-between gap-2 items-center flex-row  lg:overflow-x-auto '>
           {deta.map((items) => (
-            <div className='flex justify-between '>
-              <Link href='./' key={items.sura} className='Soreh h-20 w-20 text-white flex justify-evenly items-center'>{items.sura_name}</Link>
+            <div className='flex justify-between items-center gap-8 cursor-pointer'>
+              <Link href={`./sure/${items.sura}/${items.sura}`} key={items.sura} className='Soreh  h-20 w-20 text-white flex justify-evenly items-center'>{items.sura_name}</Link>
             </div>
           ))}
         </div>

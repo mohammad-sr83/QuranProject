@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa"  dir="rtl">
-      <body className="bg-#EAF4F4">{children}</body>
+      <body className="bg-slate-100">{children}</body>
     </html>
   );
 }

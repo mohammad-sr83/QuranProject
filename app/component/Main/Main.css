@@ -20,9 +20,14 @@
 .Soreh{
     background-image: url(../../../public/image/sura-name-container-light.svg);
     background-position: center;
-    height: 90px;
+    height: 100px;
     background-size: 100% 100%;
     font-weight: bolder;
     text-decoration: none;
     background-repeat: no-repeat;
+}
+.Scrool{
+    transform:scaleX(0.5s);
+    scrollbar-width:thin;
+    scrollbar-gutter:initial;
 }
