@@ -1,5 +1,5 @@
 'use client'
-import quran from '@/db.json/quran.rafed.net.json'
+import quran from '../../../../../db.json/quran.rafed.net.json'
 import { useState } from 'react';
 import './Menu.css'
 import Link from 'next/link';
@@ -34,10 +34,10 @@ export default function Menu() {
         <div className='overflow-x-auto h-full p-5 bg-slate-100'>
           <div className="bg-slate-100 overflow-y-auto flex text-center justify-center flex-col ">
             {sure_list && sure.map((item) => (
-              <Link href={`./sure/${item.sura}/${item.sura}`} key={item.sura}  onClick={()=>setCookie('lastSure',`${item.sura}`)} className='h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black'> {item.sura}- {item.sura_name}</Link>
+              <Link href={`../${item.sura}/${item.sura}`} key={item.sura}  onClick={()=>setCookie('lastSure',`${item.sura}`)} className='h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black'> {item.sura}- {item.sura_name}</Link>
             ))}
             {page_list && page.map((item) => (
-              <Link href={`./sure/${item}/${item}`} key={item} onClick={()=>setCookie('lastSure',`${item}`)} className='h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black'> صفحه -{item}</Link>
+              <Link href={`../${item}/${item}`} key={item} onClick={()=>setCookie('lastSure',`${item}`)} className='h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black'> صفحه -{item}</Link>
             ))}
             {jus_list && juz.map((item) => (
               <Link href='' key={item} className='h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black'>  جز -{item}</Link>

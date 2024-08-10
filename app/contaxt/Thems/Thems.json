@@ -1,0 +1,14 @@
+
+    {"night":
+        {
+        "model":"night",   
+        "bgColor":"bg-zinc-900",
+        "textColor":"text-zinc-300"
+        },
+    "after":
+        {
+        "model":"night",
+        "bgColor":"bg-orange-200",
+        "textColor":"text-orange-400"
+        }
+    }

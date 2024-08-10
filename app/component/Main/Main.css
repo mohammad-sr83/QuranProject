@@ -26,8 +26,3 @@
     text-decoration: none;
     background-repeat: no-repeat;
 }
-.Scrool{
-    transform:scaleX(0.5s);
-    scrollbar-width:thin;
-    scrollbar-gutter:initial;
-}
