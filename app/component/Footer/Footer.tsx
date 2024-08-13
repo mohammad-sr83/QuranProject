@@ -1,11 +1,11 @@
 
 export default function Footer() {
     return (
-        <footer className="bg-blue-400 w-full mt-12 mb-14 flex gap-9 justify-between items-center flex-col sm:gap-2 md:w-full  ">
+        <footer className="bg-blue-400 w-full mt-12 mb-14  flex  justify-between items-center flex-col sm:gap-2 md:w-full  ">
             <div className="mx-auto w-full max-w-screen-xl ">
-                <div className="flex justify-between items-center p-8 ">
-                    <div className="w-17  flex justify-center items-center ml-32 flex-col sm:w-10">
-                        <h2 className="mb-10 sm:text-xl md:text-5xl lg:text-4xl  ">هورالرزاق</h2>
+                <div className="flex justify-between items-center p-6 ">
+                    <div className="w-15  flex justify-center items-center ml-32 flex-col sm:w-10">
+                        <h2 className="mb-10 text-black sm:text-xl md:text-5xl lg:text-4xl  ">هورالرزاق</h2>
                         <div className="flex justify-center items-center flex-row sm:w-12">
                             <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path fill="currentColor" fill-rule="evenodd" d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z" clip-rule="evenodd" />
@@ -38,18 +38,18 @@ export default function Footer() {
                         </ul>
                     </div>
                     <div>
-                        <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white sm:text-xl"> شبكة رافـد للتنمية الثقافية</h2>
+                        <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white p-2 sm:text-xl"> شبكة رافـد للتنمية الثقافية</h2>
                         <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                            <li className="mb-4">
+                            <li className="mb-3">
                                 <a href="#" className="hover:underline sm:text-lg">العقائد الاسلامية</a>
                             </li>
-                            <li className="mb-4">
+                            <li className="mb-3">
                                 <a href="#" className="hover:underline sm:text-lg">الصوتيات والمرئيات</a>
                             </li>
-                            <li className="mb-4">
+                            <li className="mb-3">
                                 <a href="#" className="hover:underline sm:text-lg">المکتبة الإسلامية</a>
                             </li>
-                            <li className="mb-4">
+                            <li className="mb-3">
                                 <a href="#" className="hover:underline sm:text-lg">المؤمل</a>
                             </li>
                         </ul>

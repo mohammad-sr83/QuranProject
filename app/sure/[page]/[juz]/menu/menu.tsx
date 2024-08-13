@@ -13,7 +13,7 @@ export default function Menu() {
   const page = quran.page_list
   return (
     <div className='fixed  z-20 ms:w-1/4 h-full flex border-t-0 pb-16 lg:w-1/4 md:w-1/4 w-full'>
-      <div className=" menu  flex  flex-col   bg-slate-100 lg:w-full md:w-full w-full">
+      <div className=" menu  flex  flex-col   bg-slate-100 lg:w-full md:w-full w-full dark:bg-slate-400">
         <div className="flex justify-center items-center p-4">
           <button className={`btn ${sure_list && 'active'}`} onClick={() => {
             setsure_list(true),

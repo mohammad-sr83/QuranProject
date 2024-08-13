@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { getCookie } from 'cookies-next';
-import Thems from '@/app/contaxt/Thems/Thems.json'
 import "./globals.css";
+import { getCookie } from "cookies-next";
 export  const metadata: Metadata = {
   title: "Quaran",
   description: "Quaran Home page ",
@@ -12,10 +11,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>){
-  const ColorCookie=getCookie('color')
+  const thems=getCookie('thems')
   return (
-    <html lang="fa" dir="rtl">
-      <body className={`${ColorCookie=='night'&&"bg-black"}`}>{children}</body>
+    <html lang="fa" dir="rtl" data-theme='theme'>
+      <body className="bg-primary text-typography">{children}</body>
     </html>
   );
 }

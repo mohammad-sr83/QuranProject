@@ -1,0 +1,4 @@
+html[data-theme="theme2"] {
+    --color-primary: #f4cc70;
+    --color-typography: #020202;
+}

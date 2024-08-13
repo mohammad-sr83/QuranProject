@@ -1,13 +1,11 @@
 import Link from 'next/link'
 import './Main.css'
+import 'swiper/css'
 import quran from '@/db.json/quran.rafed.net.json'
 import Joze from './Joze/Joze'
 import Soreh from './Soreh/Soreh'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css'
 import { getCookie, setCookie } from 'cookies-next'
 
 export default function Main() {
@@ -19,10 +17,10 @@ export default function Main() {
         <div className='w-52 h-52 bg-cover bg-no-repeat absolute top-16 Qoran'></div>
       </div>
       <div className='flex justify-center items-center mr-auto ml-auto mt-6'>
-        <Link href={`${lastsure && `./sure/${lastsure}/${lastsure}`}./`} className='last_Soreh h-30 w-40 text-white flex justify-evenly items-center'>آخرین سوره</Link>
+        <Link href={`${lastsure && `./sure/${lastsure}/${lastsure}`}/`} className='last_Soreh h-30 w-40 text-white flex justify-evenly items-center'>آخرین سوره</Link>
       </div>
       <div>
-        <h2 className='text-right p-3 text-2xl font-bold'>سوره و آیات</h2>
+        <h2 className='text-right p-3 text-2xl font-bold text-typography'>سوره و آیات</h2>
         <div className='overflow-x-none  pr-1 flex justify-between gap-2 items-center flex-row   '>
           <Swiper
             className="mySwiper"
