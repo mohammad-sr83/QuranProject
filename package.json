@@ -17,7 +17,8 @@
     "react-range": "^1.9.2",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.1.8"
+    "swiper": "^11.1.8",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^20",

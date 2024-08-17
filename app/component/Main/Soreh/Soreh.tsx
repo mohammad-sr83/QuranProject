@@ -2,7 +2,7 @@
 import quran from '@/db.json/quran.rafed.net.json'
 import Link from "next/link";
 import './Soreh.css'
-import { useState,useContext } from 'react';
+import { useState } from 'react';
 import { setCookie } from 'cookies-next';
 
 export default function Soreh() {
@@ -17,14 +17,14 @@ export default function Soreh() {
                     secend_deta.map((items) => (
                         <div key={items.sura} className="flex justify-center  items-center m-8 lg:m-12 md:m-12 ">
                             <div className="number_Soreh h-10 w-10 flex justify-center items-center text-black">{items.sura}</div>
-                            <Link href={`./sure/${items.sura}/${items.sura}`}  className="text-2xl flex text-black" onClick={()=>setCookie('lastSure',`${items.sura}`)}>{items.sura_name}</Link>
+                            <Link href={`./sure/${items.sura}/1`}  className="text-2xl flex text-black" onClick={()=>setCookie('lastSure',`${items.sura}`)}>{items.sura_name}</Link>
                         </div>
                     ))
                 ) : (
                     deta.map((items) => (
                         <div key={items.sura} className="flex justify-center  items-center m-8 ">
                             <div className="number_Soreh h-10 w-10 flex justify-center items-center">{items.sura}</div>
-                            <Link href={`./sure/${items.sura}/${items.sura}`} className="text-2xl flex " onClick={()=>setCookie('lastSure',`${items.sura}`)}>{items.sura_name}</Link>
+                            <Link href={`./sure/${items.sura}/1`} className="text-2xl flex " onClick={()=>setCookie('lastSure',`${items.sura}`)}>{items.sura_name}</Link>
                         </div>
                     ))
                 )}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getCookie } from "cookies-next";
 export  const metadata: Metadata = {
-  title: "Quaran",
+  title: "Quaran-Home",
   description: "Quaran Home page ",
 };
 

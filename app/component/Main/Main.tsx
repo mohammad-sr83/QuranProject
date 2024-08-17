@@ -17,7 +17,7 @@ export default function Main() {
         <div className='w-52 h-52 bg-cover bg-no-repeat absolute top-16 Qoran'></div>
       </div>
       <div className='flex justify-center items-center mr-auto ml-auto mt-6'>
-        <Link href={`${lastsure && `./sure/${lastsure}/${lastsure}`}/`} className='last_Soreh h-30 w-40 text-white flex justify-evenly items-center'>آخرین سوره</Link>
+        <Link href={`${lastsure && `./sure/${lastsure}/1`}/`} className='last_Soreh h-30 w-40 text-white flex justify-evenly items-center'>آخرین سوره</Link>
       </div>
       <div>
         <h2 className='text-right p-3 text-2xl font-bold text-typography'>سوره و آیات</h2>
@@ -44,7 +44,7 @@ export default function Main() {
             loop={true}
             autoplay={{ delay: 2000 }}
           >{deta.map((items) => (
-            <SwiperSlide  key={items.sura}><div className=''><Link href={`./sure/${items.sura}/${items.sura}`} key={items.sura} onClick={() => setCookie('lastSure', `${items.sura}`)} className='Soreh gap-8 cursor-pointer  text-white flex justify-evenly items-center'>{items.sura_name}</Link></div></SwiperSlide>
+            <SwiperSlide  key={items.sura}><div className=''><Link href={`./sure/${items.sura}/1`} key={items.sura} onClick={() => setCookie('lastSure', `${items.sura}`)} className='Soreh gap-8 cursor-pointer  text-white flex justify-evenly items-center'>{items.sura_name}</Link></div></SwiperSlide>
           ))}
           </Swiper>
         </div>

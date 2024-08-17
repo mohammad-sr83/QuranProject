@@ -1,4 +1,4 @@
-.Soreh{
+.Soreh {
     background-image: url(../../../../public/image/sura-name-container-light.svg);
     background-position: center;
     height: 100px;
@@ -7,9 +7,25 @@
     text-decoration: none;
     background-repeat: no-repeat;
 }
+
 .number_Soreh {
     background-image: url(../../../../public/image/number-header-light.svg);
     background-position: center;
-    background-size: 100%  100%;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+}
+
+.besm {
+    height: 42px;
+    background-image: url(../../../../public/image/besm-allah-light.svg);
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.nameSoreh {
+    background-image: url(../../../../public/image/sura-title-light.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
