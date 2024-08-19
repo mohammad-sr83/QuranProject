@@ -1,12 +1,13 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { changeTheme } from "@/app/component/Them/hederthems";
 import Link from "next/link"
+import useFeth from "@/app/_lib/api/FethData";
+import useGetPack from "@/app/_lib/api/FethPackGet";
+import { Swiper, SwiperSlide } from 'swiper/react'
 import './quranpage.css'
 import Menu from "./menu/menu"
 import { setCookie } from "cookies-next";
-
-
 export default function page({ params }: { params: { page: string, aye: string } }) {
     const [menuBar, setMenuBar] = useState(false)
     const [isShow, setIsShow] = useState(false)
@@ -14,37 +15,11 @@ export default function page({ params }: { params: { page: string, aye: string }
     const [isPlay, setIsPlay] = useState(false)
     const [isShowAuther, setShowAuther] = useState(false)
     const [Auther, setAuther] = useState("الغسانی")
-    const [textSize, setTextSize] = useState(1)
-    const [data, setData] = useState(null)
-    const [nameSure, setNamesura] = useState()
-    const [pageSure, setpagesura] = useState()
-    const [JuzSure, setJuzsura] = useState()
-    const [Aya, setaya] = useState([])
-    useEffect(() => {
-        const fetchdate = async () => {
-            console.log(params.page)
-            const response = await fetch(`http://localhost:3000/api/sure_aye/${params.page}/`)
-            const dateJson = await response.json()
-            if (dateJson) {
-                setData(dateJson)
-                setNamesura(dateJson.pack.find((items: any) => items.sura == params.page).sura_name)
-                setpagesura(dateJson.page_number)
-                setJuzsura(dateJson.pack.find((items: any) => items.sura == params.page).juz)
-                setaya(dateJson.pack.find((items: any) => items.sura == params.page))
-            }
-            console.log(dateJson)
-        }
-        // const packdate = async () => {
-        //     console.log(params.page)
-        //     const response = await fetch(`http://localhost:3000/api/get_pack/${params.page}/`)
-        //     const dateJson = await response.json()
-            
-        // }
-        // packdate()
-        fetchdate()
-    }, [])
+    const [textSize, setTextSize] = useState(2)
+    const [data, nameSure, packSure, pageSure, JuzSure] = useFeth(params.page)
+    const [dataPack, StartSure] = useGetPack(params.page, packSure)
     return (
-        <div className="px-1">
+        <div className={` px-1`}>
             <div className="relative flex justify-around flex-col">
                 {/* درست کردن هدر بخش نمایش قرآن */}
                 <div className='sticky top-0 w-full  z-15 '>
@@ -83,24 +58,46 @@ export default function page({ params }: { params: { page: string, aye: string }
                     </nav>
                     {menuBar ? (<Menu />) : ("")}
                 </div>
-                {data && <div className={`h-96 bg-slate-100 p-2 text-typography text-${textSize}xl  w-full   md:w-4/5  lg:w-4/5 mr-auto ml-auto`}>
-                    {/* برای جایگذاری قرآن  */}
-                    <div className="nameSoreh flex justify-center w-full mb-3 h-10 text-center text-3xl pb-3 text-white mt-3 ">{nameSure}</div>
-                    <div className="besm mb-6 "></div>
-                    {/* برا جایگذاری متن قرآن */}
-                    {/* {Aya.map((item)=>{
-                         <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
-                            {item.text}
-                         <span>{item.aya}</span>
-                         </span>
-                    })} */}
-                </div>}
+                {dataPack && <>
+                    <Swiper
+                        className={` mySwiper  bg-primary p-2 text-typography text-${textSize}xl  w-full mb-8  md:  lg: mr-auto ml-auto`}
+
+                    >
+                        <SwiperSlide className="h-full p-3">
+                            <div className="  nameSoreh flex justify-center w-full mb-3 h-10 text-center text-3xl pb-3 text-white mt-3 ">{nameSure}</div>
+                            <div className="besm mb-6 "></div>
+                            <div className="overflow-hidden  text-justify">
+                                {data?.map((item: any) =>
+                                    <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
+                                        {item.text}
+                                        <span className="Aya_soreh p-1 text-center text-xs text-typography  justify-evenly items-center ">{item.aya} </span>
+                                    </span>
+                                )}
+
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide className="h-full p-3" >
+                            <div className="w-full h-full overflow-hidden  text-justify">
+                                {dataPack?.map((item: any) =>
+                                    <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
+                                        {item.text}
+                                        <span className="Aya_soreh p-1 text-center text-xs text-typography  justify-evenly items-center ">{item.aya} </span>
+                                    </span>
+                                )}
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>Slide 1</SwiperSlide>
+                        <SwiperSlide>Slide 2</SwiperSlide>
+                    </Swiper>
+                </>
+                }
+                {/* برا جایگذاری متن قرآن */}
                 {menuBar ? '' : <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center  mt-9 h-11  z-10 border-black  shadow-xl pr-3 ">
                     {/* برای جایگذاری پلی لیست   */}
                     <div className=" cursor-pointer">
                         {isShow && <ul className="mb-8 fixed bottom-6">
-                            <button onClick={() => setTextSize(1)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">-A</button>
-                            <button onClick={() => setTextSize(2)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">+A</button>
+                            <button onClick={() => setTextSize(2)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">-A</button>
+                            <button onClick={() => setTextSize(3)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">+A</button>
                             <button onClick={() => {
                                 changeTheme("theme1")
                                 setCookie('thems', 'theme1')
