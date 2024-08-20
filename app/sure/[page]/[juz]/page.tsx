@@ -19,10 +19,10 @@ export default function page({ params }: { params: { page: string, aye: string }
     const [data, nameSure, packSure, pageSure, JuzSure] = useFeth(params.page)
     const [dataPack, StartSure] = useGetPack(params.page, packSure)
     return (
-        <div className={` px-1`}>
+        <div className={`px-1 font-[Quran]`}>
             <div className="relative flex justify-around flex-col">
                 {/* درست کردن هدر بخش نمایش قرآن */}
-                <div className='sticky top-0 w-full  z-15 '>
+                <div className='sticky top-0 w-full  z-20 '>
                     <nav className="border-black  bg-white text-typography shadow-xl pr-3  ">
                         <div className="max-w-screen-full flex flex-wrap items-center justify-between mx-auto ">
                             <button data-collapse-toggle="navbar-hamburger" onClick={() => setMenuBar(!menuBar)} type="button" className="inline-flex transform-cpu items-center justify-center  w-13 h-13 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-hamburger" aria-expanded="false">
@@ -60,7 +60,12 @@ export default function page({ params }: { params: { page: string, aye: string }
                 </div>
                 {dataPack && <>
                     <Swiper
-                        className={` mySwiper  bg-primary p-2 text-typography text-${textSize}xl  w-full mb-8  md:  lg: mr-auto ml-auto`}
+                        onClick={() => {
+                            setIsShow(false)
+                            setIsShowSpeed(false)
+                            setShowAuther(false)
+                        }}
+                        className={` mySwiper  overflow-hidden bg-primary p-2 text-typography text-${textSize}xl  w-full mb-8  md:  lg: mr-auto ml-auto`}
 
                     >
                         <SwiperSlide className="h-full p-3">
@@ -70,7 +75,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                                 {data?.map((item: any) =>
                                     <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
                                         {item.text}
-                                        <span className="Aya_soreh p-1 text-center text-xs text-typography  justify-evenly items-center ">{item.aya} </span>
+                                        <span className="Aya_soreh  p-2 px-auto  text-center text-xs text-typography ">{item.aya} </span>
                                     </span>
                                 )}
 
@@ -86,8 +91,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                                 )}
                             </div>
                         </SwiperSlide>
-                        <SwiperSlide>Slide 1</SwiperSlide>
-                        <SwiperSlide>Slide 2</SwiperSlide>
+
                     </Swiper>
                 </>
                 }

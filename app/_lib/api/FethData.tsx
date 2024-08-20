@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
- 
+
 export default  function  useFeth(params:string) {
     const [data, setData] = useState()
     const [nameSure, setNamesura] = useState()

@@ -16,5 +16,5 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" data-theme='theme'>
       <body className="bg-primary text-typography">{children}</body>
     </html>
-  );
+  ); 
 }

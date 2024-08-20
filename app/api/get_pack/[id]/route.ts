@@ -1,7 +1,7 @@
 
 type paramsType={params:{id:string}}
 
-export async function GET(response:any,{params}:paramsType){
+export async function GET(response:Response,{params}:paramsType){
     
     const {id} = params
  

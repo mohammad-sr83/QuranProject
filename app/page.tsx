@@ -5,7 +5,7 @@ import Footer from "./component/Footer/Footer";
 
 export default function Home() {
   return (
-    <div className='bg-primary text-typography px-1'>
+    <div className='bg-primary text-typography px-1 font-[Quran]'>
       <Navbar />
       <Main />
       <Footer />
