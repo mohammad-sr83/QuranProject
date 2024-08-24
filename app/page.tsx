@@ -1,7 +1,7 @@
 'use client'
-import Navbar from "./component/Navbar/Navbar";
-import Main from "./component/Main/Main";
-import Footer from "./component/Footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
+import Main from "./components/Main/Main";
+import Footer from "./components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar />
       <Main />
       <Footer />
-      <h2 className="text-center">Copy by mohammadsoleimanpour</h2>
+      <h2 className="text-center">@ by mohammadsoleimanpour</h2>
     </div>
   );
 }

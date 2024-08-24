@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import { changeTheme } from "@/app/component/Them/hederthems";
+import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link"
 import useFeth from "@/app/_lib/api/FethData";
 import useGetPack from "@/app/_lib/api/FethPackGet";
@@ -15,9 +15,10 @@ export default function page({ params }: { params: { page: string, aye: string }
     const [isPlay, setIsPlay] = useState(false)
     const [isShowAuther, setShowAuther] = useState(false)
     const [Auther, setAuther] = useState("الغسانی")
+    const [Speed, setSpeed] = useState(1)
     const [textSize, setTextSize] = useState(2)
     const [data, nameSure, packSure, pageSure, JuzSure] = useFeth(params.page)
-    const [dataPack, StartSure] = useGetPack(params.page, packSure)
+    const [dataPack, StartSure] = useGetPack(params.page)
     return (
         <div className={`px-1 font-[Quran]`}>
             <div className="relative flex justify-around flex-col">
@@ -58,7 +59,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                     </nav>
                     {menuBar ? (<Menu />) : ("")}
                 </div>
-                {dataPack && <>
+                 <>
                     <Swiper
                         onClick={() => {
                             setIsShow(false)
@@ -66,7 +67,6 @@ export default function page({ params }: { params: { page: string, aye: string }
                             setShowAuther(false)
                         }}
                         className={` mySwiper  overflow-hidden bg-primary p-2 text-typography text-${textSize}xl  w-full mb-8  md:  lg: mr-auto ml-auto`}
-
                     >
                         <SwiperSlide className="h-full p-3">
                             <div className="  nameSoreh flex justify-center w-full mb-3 h-10 text-center text-3xl pb-3 text-white mt-3 ">{nameSure}</div>
@@ -94,25 +94,25 @@ export default function page({ params }: { params: { page: string, aye: string }
 
                     </Swiper>
                 </>
-                }
+                
                 {/* برا جایگذاری متن قرآن */}
                 {menuBar ? '' : <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center  mt-9 h-11  z-10 border-black  shadow-xl pr-3 ">
                     {/* برای جایگذاری پلی لیست   */}
                     <div className=" cursor-pointer">
                         {isShow && <ul className="mb-8 fixed bottom-6">
-                            <button onClick={() => setTextSize(2)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">-A</button>
-                            <button onClick={() => setTextSize(3)} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">+A</button>
+                            <button onClick={() => setTextSize(2)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">-A</button>
+                            <button onClick={() => setTextSize(3)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">+A</button>
                             <button onClick={() => {
                                 changeTheme("theme1")
                                 setCookie('thems', 'theme1')
-                            }} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200" ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            }} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100" ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
                                 </svg>
                             </button>
                             <button onClick={() => {
                                 changeTheme("theme2")
                                 setCookie('thems', 'theme2')
-                            }} className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            }} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
                                 </svg>
                             </button>
@@ -125,15 +125,16 @@ export default function page({ params }: { params: { page: string, aye: string }
                     </div>
                     <div className="cursor-pointer">
                         {isShowSpeed && <ul className="mb-6 fixed bottom-6">
-                            <button className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">1.5</button>
-                            <button className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">2</button>
-                            <button className="bg-blue-300 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-200">2.5</button>
+                            <button onClick={() => setSpeed(1)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">1</button>
+                            <button onClick={() => setSpeed(1.5)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">1.5</button>
+                            <button onClick={() => setSpeed(2)}  className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">2</button>
+                            <button onClick={() => setSpeed(2.5)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">2.5</button>
                         </ul>}
                         <span onClick={() => {
                             setIsShowSpeed(!isShowSpeed)
                             setIsShow(false)
                             setShowAuther(false)
-                        }}>1.00x</span>
+                        }}>{Speed}x</span>
                     </div>
                     <button className="p-2 lg:p-10 xl:p-10">
                         {isPlay ? <svg onClick={() => {
