@@ -1,14 +1,17 @@
 'use client'
 import { useState } from "react"
+import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link"
 import useFeth from "@/app/_lib/api/FethData";
 import useGetPack from "@/app/_lib/api/FethPackGet";
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 import './quranpage.css'
+import 'swiper/css';
 import Menu from "./menu/menu"
 import { setCookie } from "cookies-next";
 export default function page({ params }: { params: { page: string, aye: string } }) {
+    // const router = useRouter()
     const [menuBar, setMenuBar] = useState(false)
     const [isShow, setIsShow] = useState(false)
     const [isShowSpeed, setIsShowSpeed] = useState(false)
@@ -16,11 +19,26 @@ export default function page({ params }: { params: { page: string, aye: string }
     const [isShowAuther, setShowAuther] = useState(false)
     const [Auther, setAuther] = useState("الغسانی")
     const [Speed, setSpeed] = useState(1)
+    const [data, packSure, pageSure] = useFeth(params.page)
+    const [Page, setPage] = useState()
+    const [JuzSure, setJuzsura] = useState()
+    const [nameSure, setNamesura] = useState()
     const [textSize, setTextSize] = useState(2)
-    const [data, nameSure, packSure, pageSure, JuzSure] = useFeth(params.page)
-    const [dataPack, StartSure] = useGetPack(params.page)
+    const [packbefor, setPackBefor] = useState<[]>()
+    const [packafter, setPackAfter] = useState<[]>()
+    const SwiperRf = useSwiper()
+    const datakol = pageSure?.map((item: []) => data?.filter((ite: any) => ite.page == item))
+    const Startpage = datakol?.filter((items: []) => items.find((item: { sura: Number }) => item.sura == Number(params.page)))
+    // console.log(Startpage?.find((item:[])=>item))///برای گرفتن آرایه اول که داخل آن سوره انتخابی موجود است 
+    // const [dataPack] = useGetPack(String(packSure))
+    if (packSure) {
+        const After = useGetPack(String(packSure+1))
+        setPackAfter(After)
+        const Befor = useGetPack(String(packSure-1))
+        setPackBefor(Befor)
+    }
     return (
-        <div className={`px-1 font-[Quran]`}>
+        <div className={`font-[Quran]`}>
             <div className="relative flex justify-around flex-col">
                 {/* درست کردن هدر بخش نمایش قرآن */}
                 <div className='sticky top-0 w-full  z-20 '>
@@ -45,7 +63,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                                     <Link href='' className='Soreh  h-20 w-20 text-typography flex justify-evenly items-center '>{nameSure}</Link>
                                 </div>
                                 <div className="flex items-center space-x-3 pr-3 rtl:space-x-reverse lg:pr-7 xl:pr-7">
-                                    <div className="number_Soreh h-10 w-10 flex justify-center items-center">{pageSure}</div>
+                                    <div className="number_Soreh h-10 w-10 flex justify-center items-center">{Page}</div>
                                 </div>
                             </div>
                             <div className="pl-2">
@@ -59,44 +77,54 @@ export default function page({ params }: { params: { page: string, aye: string }
                     </nav>
                     {menuBar ? (<Menu />) : ("")}
                 </div>
-                 <>
+                <>
                     <Swiper
                         onClick={() => {
                             setIsShow(false)
                             setIsShowSpeed(false)
                             setShowAuther(false)
                         }}
-                        className={` mySwiper  overflow-hidden bg-primary p-2 text-typography text-${textSize}xl  w-full mb-8  md:  lg: mr-auto ml-auto`}
+                        hashNavigation={true}
+                        scrollbar={{ draggable: true }}
+                        className={` mySwiper w-full overflow-hidden bg-primary p-2  text-typography text-${textSize}xl   mb-8    lg:w-3/4 mr-auto ml-auto `}
                     >
-                        <SwiperSlide className="h-full p-3">
-                            <div className="  nameSoreh flex justify-center w-full mb-3 h-10 text-center text-3xl pb-3 text-white mt-3 ">{nameSure}</div>
-                            <div className="besm mb-6 "></div>
-                            <div className="overflow-hidden  text-justify">
-                                {data?.map((item: any) =>
-                                    <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
-                                        {item.text}
-                                        <span className="Aya_soreh  p-2 px-auto  text-center text-xs text-typography ">{item.aya} </span>
-                                    </span>
-                                )}
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide className="h-full p-3" >
-                            <div className="w-full h-full overflow-hidden  text-justify">
-                                {dataPack?.map((item: any) =>
-                                    <span className="text-xl mt-4  hover:bg-slate-300 cursor-pointer">
-                                        {item.text}
-                                        <span className="Aya_soreh p-1 text-center text-xs text-typography  justify-evenly items-center ">{item.aya} </span>
-                                    </span>
-                                )}
-                            </div>
-                        </SwiperSlide>
-
+                        {/* {packbefor&&} */}
+                        {data && datakol?.map((items: any, index: any) => (
+                            <>
+                                <SwiperSlide  virtualIndex={items == Startpage?.find((item: []) => item) ? 90 : index} className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify ">
+                                    {items.map((item: any) => (
+                                        <>
+                                            {item.aya == 1 && <span>
+                                                <div className=" nameSoreh flex justify-center w-full  h-10 text-center text-3xl pb-3 text-white mt-1 ">{item.sura_name}</div>
+                                                <div className="besm mb-6 "></div>
+                                            </span>}
+                                            <span onMouseMove={() => {
+                                                // router.replace(`/sure/${item.sura}/${item.aya}`)
+                                                setCookie('Juz', `${String(JuzSure)}`)
+                                                setCookie('Page', `${String(Page)}`)
+                                                setPage(item.page)
+                                                setNamesura(item.sura_name)
+                                                setJuzsura(item.juz)
+                                            }} onTouchStart={() => {
+                                                setCookie('Juz', `${String(JuzSure)}`)
+                                                setCookie('Page', `${String(Page)}`)
+                                                setPage(item.page)
+                                                setNamesura(item.sura_name)
+                                                setJuzsura(item.juz)
+                                            }} key={item.index} className={`  text-[20px]   hover:bg-slate-300 cursor-pointer lg:text-[30px] `}>
+                                                {item.aya == 1 ? item.text?.replace('بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ', '') : item.text}
+                                                <span className="Aya_soreh  p-2 px-auto  text-center  text-xs text-typography ">{item.aya}</span>
+                                            </span>
+                                        </>))}
+                                </SwiperSlide></>
+                        ))
+                        }
+                        {/* {packafter&&} */}
                     </Swiper>
                 </>
-                
+
                 {/* برا جایگذاری متن قرآن */}
-                {menuBar ? '' : <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center  mt-9 h-11  z-10 border-black  shadow-xl pr-3 ">
+                {menuBar ? '' : <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center   h-11  z-10 border-black  shadow-xl pr-3 ">
                     {/* برای جایگذاری پلی لیست   */}
                     <div className=" cursor-pointer">
                         {isShow && <ul className="mb-8 fixed bottom-6">
@@ -127,7 +155,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                         {isShowSpeed && <ul className="mb-6 fixed bottom-6">
                             <button onClick={() => setSpeed(1)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">1</button>
                             <button onClick={() => setSpeed(1.5)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">1.5</button>
-                            <button onClick={() => setSpeed(2)}  className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">2</button>
+                            <button onClick={() => setSpeed(2)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">2</button>
                             <button onClick={() => setSpeed(2.5)} className="bg-blue-200 rounded-3xl mb-3 w-6 flex justify-center items-center hover:bg-blue-100">2.5</button>
                         </ul>}
                         <span onClick={() => {
@@ -168,7 +196,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                             setIsShowSpeed(false)
                         }} className="cursor-pointer font-bold ">{Auther}</span>
                     </div>
-                    <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 font-bold cursor-pointer">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 font-bold m-0 cursor-pointer">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                     </svg>
                     </span>

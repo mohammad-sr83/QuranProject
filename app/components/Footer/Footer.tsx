@@ -1,7 +1,7 @@
 
 export default function Footer() {
     return (
-        <footer className="bg-blue-400 w-full mt-12 mb-14  flex  justify-between items-center flex-col sm:gap-2 md:w-full  ">
+        <footer className="bg-blue-400 w-full mt-12 mb-14  flex  justify-between items-center flex-col  md:w-full lg:flex-row ">
             <div className="mx-auto w-full max-w-screen-xl ">
                 <div className="flex justify-between items-center p-6 ">
                     <div className="w-15  flex justify-center items-center ml-32 flex-col sm:w-10">

@@ -2,30 +2,26 @@ import { useEffect, useState } from 'react'
 
 export default  function  useFeth(params:string) {
     const [data, setData] = useState<[]|null>()
-    const [nameSure, setNamesura] = useState()
-    const [packSure, setpacksura] = useState()
-    const [pageSure, setpagesura] = useState()
-    const [JuzSure, setJuzsura] = useState()
+    const [packSure, setPackSura] = useState()
+    const [pageSure, setpagesura] = useState<any>(null)    
     useEffect(() => {
         try {
             const fetchdate = async (params:string) => {
-                const response = await fetch(`http://localhost:3000/api/sure_aye/${params}`,{cache: 'no-store'})
+                const response = await fetch(`http://localhost:3000/api/sure_aye/${params}`)
                 const dateJson = await response.json()
                 if (dateJson) {
-                    setData(dateJson.pack.filter((item:any)=>item.sura == params))
-                    setNamesura(dateJson.pack.find((item:any)=>item.sura == Number(params)).sura_name)
-                    setpagesura(dateJson.page_number)
-                    setpacksura(dateJson.pack_id+1)
-                    setJuzsura(dateJson.pack.find((item:any)=>item.sura === Number(params)).juz)
+                    const oo =dateJson.pack.map((item:any)=>item.page)
+                    setData(dateJson.pack)
+                    setpagesura( oo.filter((element:any,index:any)=>oo.indexOf(element) == index))
+                    setPackSura(dateJson.pack_id)
                 }
-                return [data, nameSure, packSure,pageSure,JuzSure]
+                return [data,packSure,pageSure]
             }
             fetchdate(params)
-            
         }
         catch {
             console.log('err')
         }
     },[])
-    return [data, nameSure, packSure,pageSure,JuzSure]
+    return [data ,packSure,pageSure]
 }

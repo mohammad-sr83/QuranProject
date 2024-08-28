@@ -14,7 +14,7 @@ export default function RootLayout({
   const thems=getCookie('thems')
   return (
     <html lang="fa" dir="rtl" data-theme='theme'>
-      <body className="bg-primary text-typography">{children}</body>
+      <body className="bg-primary text-typography px-1">{children}</body>
     </html>
   ); 
 }
