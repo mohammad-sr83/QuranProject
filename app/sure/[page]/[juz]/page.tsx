@@ -26,17 +26,16 @@ export default function page({ params }: { params: { page: string, aye: string }
     const [textSize, setTextSize] = useState(2)
     const [packbefor, setPackBefor] = useState<[]>()
     const [packafter, setPackAfter] = useState<[]>()
-    const SwiperRf = useSwiper()
     const datakol = pageSure?.map((item: []) => data?.filter((ite: any) => ite.page == item))
     const Startpage = datakol?.filter((items: []) => items.find((item: { sura: Number }) => item.sura == Number(params.page)))
     // console.log(Startpage?.find((item:[])=>item))///برای گرفتن آرایه اول که داخل آن سوره انتخابی موجود است 
     // const [dataPack] = useGetPack(String(packSure))
-    if (packSure) {
-        const After = useGetPack(String(packSure+1))
-        setPackAfter(After)
-        const Befor = useGetPack(String(packSure-1))
-        setPackBefor(Befor)
-    }
+    // if (packSure) {
+    //     const After = useGetPack(String(packSure+1))
+    //     setPackAfter(After)
+    //     const Befor = useGetPack(String(packSure-1))
+    //     setPackBefor(Befor)
+    // }
     return (
         <div className={`font-[Quran]`}>
             <div className="relative flex justify-around flex-col">
@@ -51,7 +50,7 @@ export default function page({ params }: { params: { page: string, aye: string }
                                     </svg>
                                 ) : (
                                     <svg className="w-5 h-5 bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
                                     </svg>
                                 )}
                             </button>
@@ -89,34 +88,35 @@ export default function page({ params }: { params: { page: string, aye: string }
                         className={` mySwiper w-full overflow-hidden bg-primary p-2  text-typography text-${textSize}xl   mb-8    lg:w-3/4 mr-auto ml-auto `}
                     >
                         {/* {packbefor&&} */}
-                        {data && datakol?.map((items: any, index: any) => (
-                            <>
-                                <SwiperSlide  virtualIndex={items == Startpage?.find((item: []) => item) ? 90 : index} className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify ">
+                        {data && datakol?.map((items: any, index: number) => (
+                                <SwiperSlide key={index}  virtualIndex={items == Startpage?.find((item: []) => item) ? 90 : index} className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify ">
                                     {items.map((item: any) => (
-                                        <>
+                                        <span key={item.index}>
                                             {item.aya == 1 && <span>
                                                 <div className=" nameSoreh flex justify-center w-full  h-10 text-center text-3xl pb-3 text-white mt-1 ">{item.sura_name}</div>
                                                 <div className="besm mb-6 "></div>
                                             </span>}
                                             <span onMouseMove={() => {
                                                 // router.replace(`/sure/${item.sura}/${item.aya}`)
-                                                setCookie('Juz', `${String(JuzSure)}`)
-                                                setCookie('Page', `${String(Page)}`)
+                                                setCookie('lastSure', `${String(item.sura)}`)
+                                                setCookie('Juz', `${String(item.juz)}`)
+                                                setCookie('Page', `${String(item.page)}`)
                                                 setPage(item.page)
                                                 setNamesura(item.sura_name)
                                                 setJuzsura(item.juz)
                                             }} onTouchStart={() => {
-                                                setCookie('Juz', `${String(JuzSure)}`)
-                                                setCookie('Page', `${String(Page)}`)
+                                                setCookie('lastSure', `${String(item.sura)}`)
+                                                setCookie('Juz', `${String(item.juz)}`)
+                                                setCookie('Page', `${String(item.page)}`)
                                                 setPage(item.page)
                                                 setNamesura(item.sura_name)
                                                 setJuzsura(item.juz)
-                                            }} key={item.index} className={`  text-[20px]   hover:bg-slate-300 cursor-pointer lg:text-[30px] `}>
+                                            }}  className={`  text-[20px]   hover:bg-slate-300 cursor-pointer lg:text-[30px] `}>
                                                 {item.aya == 1 ? item.text?.replace('بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ', '') : item.text}
                                                 <span className="Aya_soreh  p-2 px-auto  text-center  text-xs text-typography ">{item.aya}</span>
                                             </span>
-                                        </>))}
-                                </SwiperSlide></>
+                                        </span>))}
+                                </SwiperSlide>
                         ))
                         }
                         {/* {packafter&&} */}
