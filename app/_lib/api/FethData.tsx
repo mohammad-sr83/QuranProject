@@ -10,9 +10,9 @@ export default  function  useFeth(params:string) {
                 const response = await fetch(`http://localhost:3000/api/sure_aye/${params}`)
                 const dateJson = await response.json()
                 if (dateJson) {
-                    const oo =dateJson.pack.map((item:any)=>item.page)
+                    const oo =dateJson?.pack?.map((item:any)=>item.page)
                     setData(dateJson.pack)
-                    setpagesura( oo.filter((element:any,index:any)=>oo.indexOf(element) == index))
+                    setpagesura( oo?.filter((element:any,index:any)=>oo.indexOf(element) == index))
                     setPackSura(dateJson.pack_id)
                 }
                 return [data,packSure,pageSure]

@@ -1,5 +1,5 @@
 'use client'
-import quran from '../../../../../db.json/quran.rafed.net.json'
+import quran from '@/db.json/quran.rafed.net.json'
 import {  useState } from 'react';
 import './Menu.css'
 import Link from 'next/link';
@@ -19,31 +19,34 @@ export default function Menu() {
       <div className=" menu  flex  flex-col   bg-slate-100 lg:w-full md:w-full w-full dark:bg-slate-400">
         <div className="flex justify-center items-center p-4">
           <button className={`btn ${sure_list && 'active'}`} onClick={() => {
+            // console.log(document.querySelectorAll('.hold')[0].offsetTop)///برای دسترسی به مقدار که اکتیو شده
             setsure_list(true),
               sepage_list(false),
               setjus_list(false)
           }}>سوره</button>
           <button className={`btn ${page_list && 'active'}`} onClick={() => {
+            // console.log(document.querySelectorAll('.hold')[0].offsetTop)
             setsure_list(false),
               sepage_list(true),
               setjus_list(false)
           }}>صفحه</button>
           <button className={`btn ${jus_list && 'active'}`} onClick={() => {
+            // console.log(document.querySelectorAll('.hold')[0].offsetTop)
             setsure_list(false),
               sepage_list(false),
               setjus_list(true)
           }}>جزو</button>
         </div>
-        <div className='overflow-x-auto  h-full p-5 bg-slate-100'>
-          <div className="bg-slate-100 overflow-y-auto flex text-center justify-center flex-col " >
+        <div className='overflow-x-auto  h-full p-5 bg-slate-100  parent '>
+          <div className="bg-slate-100 overflow-y-auto flex text-center justify-center flex-col"  >
             {sure_list && sure.map((item) => (
-              <Link href={`../${item.sura}/1`}   key={item.sura} onClick={() => setCookie('lastSure', `${item.sura}`)} className={`${item.sura == Number(PageOnline) && 'bg-slate-400  snap-center'} h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}> {item.sura}- {item.sura_name}</Link>
+              <Link href={`../${item.sura}/1`}   key={item.sura} onClick={() => setCookie('lastSure', `${item.sura}`)} className={`${item.sura == Number(PageOnline) && 'bg-slate-400  snap-center hold'} h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}> {item.sura}- {item.sura_name}</Link>
             ))}
             {page_list && page.map((item) => (
-              <Link href={`../${item}/`} key={item} onClick={() => setCookie('lastSure', `${item}`)} className={`${item == Page && 'bg-slate-400 snap-center object-center '} h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}> صفحه -{item}</Link>
+              <Link href={`../${item}/`} key={item} onClick={() => setCookie('lastSure', `${item}`)} className={`${item == Page && 'bg-slate-400 snap-center object-center hold'} h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}> صفحه -{item}</Link>
             ))}
             {jus_list && juz.map((item) => (
-              <Link href='' key={item} className={` ${item == Juz && 'bg-slate-400 snap-center object-center '} h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>  جز -{item}</Link>
+              <Link href='' key={item} className={` ${item == Juz && 'bg-slate-400 snap-center object-center hold '} h-13 p-2 hover:bg-slate-300  font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>  جز -{item}</Link>
             ))}
           </div>
         </div>
