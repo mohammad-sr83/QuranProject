@@ -10,7 +10,7 @@ export default  function useGetPack(params:string) {
     useEffect(() => {
         try {
             const fetchdate = async (params:string) => {
-                const response = await fetch(`http://localhost:3000/api/get_pack/${params}/`,{cache: 'no-store'})
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${params}/`,{cache: 'no-store'})
                 const dateJson = await response.json()
                 if (dateJson) {
                     setDataPack(dateJson?.pack?.filter((item:any)=>item.sura_name == PageOnline))
