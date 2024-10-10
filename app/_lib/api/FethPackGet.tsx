@@ -1,24 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-export default function useFeth(params:string) {
-    const [data, setData] = useState<any[]>();
-
+export default  function useGetPack(params:string) {
+    const [dataPack, setDataPack] = useState<[]>()
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/get_pack/${params}`);
-                const dateJson = await response.json();
-                
+        try {
+            const fetchdate = async (params:string) => {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${params}/`,{cache: 'no-store'})
+                const dateJson = await response.json()
                 if (dateJson) {
-                    setData(dateJson.pack);
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
+                    setDataPack(dateJson?.pack)
+                    }
+                return [dataPack]
             }
-        };
-
-        fetchData();
-    }, [params]);
-
-    return [data];
+            fetchdate(params)
+        }
+        catch {
+            console.log('err')
+        }
+    },[])
+    return [dataPack]
 }

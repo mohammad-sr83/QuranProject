@@ -31,6 +31,7 @@ export default function Page({ params }: PageProps) {
   const [juzSure, setJuzsura] = useState<number | null>(null);
   const [nameSure, setNamesura] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(2);
+
   const [datakol, setDatakol] = useState<any[]>([]);
   const [data, packSure, pageSure] = useFeth(params.page);
   const swiperRef = useRef<any>(null);
@@ -165,7 +166,6 @@ export default function Page({ params }: PageProps) {
           </nav>
           {menuBar ? <Menu /> : ""}
         </div>
-
         <Swiper
           onClick={() => {
             setIsShow(false);
