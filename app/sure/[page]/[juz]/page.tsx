@@ -214,6 +214,14 @@ export default function Page({ params }: PageProps) {
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
                       }}
+                      onTouchStart={()=>{
+                        setCookie("lastSure", `${String(item.sura)}`);
+                        setCookie("Juz", `${String(item.juz)}`);
+                        setCookie("Page", `${String(item.page)}`);
+                        setPage(item.page);
+                        setNamesura(item.sura_name);
+                        setJuzsura(item.juz);
+                      }}
                       className={`text-[20px] hover:bg-slate-300 cursor-pointer lg:text-[30px]`}
                     >
                       {item.aya == 1
