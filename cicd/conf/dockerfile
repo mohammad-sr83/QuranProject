@@ -1,0 +1,23 @@
+FROM node:20.10-alpine3.17 as build
+
+RUN mkdir -p /usr/src/nuxt-app
+
+WORKDIR /usr/src/nuxt-app
+
+COPY . .
+
+#RUN yarn
+
+#RUN yarn build
+
+RUN npm install
+
+RUN npm run build
+
+CMD npm run start
+
+#ENV NEXT_HOST=0.0.0.0
+
+#ENV NEXT_PORT=80
+
+#ENTRYPOINT ["run", ".output/server/index.mjs"]

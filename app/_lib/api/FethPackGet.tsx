@@ -1,28 +1,24 @@
-import { useEffect, useState } from 'react'
-import quran from '@/db.json/quran.rafed.net.json'
-import { getCookie, setCookie } from 'cookies-next';
-export default  function useGetPack(params:string) {
-    const [dataPack, setDataPack] = useState<[]>()
-    const [StartSure, setStartSure] = useState()
-    const sure = quran.sura_list
-    const PageOnline = getCookie('lastSure')
-    const NameSura = sure.find((item)=>item.sura==Number(PageOnline))?.sura_name
+import { useEffect, useState } from 'react';
+
+export default function useFeth(params:string) {
+    const [data, setData] = useState<any[]>();
+
     useEffect(() => {
-        try {
-            const fetchdate = async (params:string) => {
-                const response = await fetch(`http://localhost:3000/api/get_pack/${params}/`,{cache: 'no-store'})
-                const dateJson = await response.json()
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/get_pack/${params}`);
+                const dateJson = await response.json();
+                
                 if (dateJson) {
-                    setDataPack(dateJson?.pack?.filter((item:any)=>item.sura_name == PageOnline))
-                    setStartSure(dateJson?.pack?.filter((item:any)=>item.sura == Number(params)))
-                    }
-                return [dataPack, StartSure]
+                    setData(dateJson.pack);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-            fetchdate(params)
-        }
-        catch {
-            console.log('err')
-        }
-    },[])
-    return [dataPack, StartSure]
+        };
+
+        fetchData();
+    }, [params]);
+
+    return [data];
 }

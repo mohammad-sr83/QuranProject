@@ -1,0 +1,19 @@
+deploy_production:
+  stage: deploy
+  variables:
+    IMAGE_ID: "scr.rafed.net/rafed/quranproject:"
+  only:
+    refs:
+      - master
+    changes:
+      - cicd/version.txt
+  environment:
+    name: $PROJECT_NAME
+  dependencies:
+    - build_all
+  script:
+    - pwd
+    - export VERSION=$(cat cicd/version.txt)
+    - docker build -t $IMAGE_ID$VERSION -f cicd/conf/Dockerfile .
+    - docker push $IMAGE_ID$VERSION
+    - helm upgrade --install quranproject cicd/quranproject --set image.tag=$VERSION -f cicd/quranproject/values.yaml

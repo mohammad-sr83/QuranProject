@@ -1,0 +1,8 @@
+stages: [prepare, build, deploy]
+build_all:
+  stage: build
+  script:
+    - "echo starting"
+
+include:
+  - 'cicd/deploy.yml'
