@@ -8,7 +8,7 @@ export default function useFeth(params:string) {
     useEffect(() => {
         try {
             const fetchdate = async (params:string) => {
-                const response = await fetch(`http://localhost:3000/api/sure_aye/${params}`)
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/sure_aye/${params}`)
                 const dateJson = await response.json()
                 if (dateJson) {
                     const oo =dateJson.pack.map((item:any)=>item.page)
