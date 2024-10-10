@@ -27,70 +27,68 @@ export default function Page({ params }: PageProps) {
   const [isShowAuther, setShowAuther] = useState(false);
   const [auther, setAuther] = useState("الغسانی");
   const [speed, setSpeed] = useState(1);
-  const [data, packSure, pageSure] = useFeth(params.page);
   const [page, setPage] = useState<number | null>(null);
   const [juzSure, setJuzsura] = useState<number | null>(null);
   const [nameSure, setNamesura] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(2);
-  const [sliderIn, setSliderin] = useState(400);
-  const [packBefor, setPackBefor] = useState<any[]>([]);
-  const [packAfter, setPackAfter] = useState<any[]>([]);
-  const [initialSlide, setInitialSlide] = useState(0);
-  const [packNumber, setPackNumber] = useState<number>(parseInt(params.page));
 
+  const [datakol, setDatakol] = useState<any[]>([]);
+  const [data, packSure, pageSure] = useFeth(params.page);
   const swiperRef = useRef<any>(null);
+  const [initialSlide, setInitialSlide] = useState(0);
+  let FinsIndex ;
+  useEffect(() => {
+    setDatakol(pageSure?.map((item: any) =>
+      data?.filter((ite: any) => ite.page == item)
+    ));
+  }, [pageSure, data])
+  const startPage = datakol?.find((items: any[]) =>
+    items.find((item: { sura: number ,aya:number }) => item.sura == Number(params.page) && item.aya == 1)
+  );
 
-  const datakol = pageSure?.map((item: any[]) =>
-    data?.filter((ite: any) => ite.page == item)
-  );
-  const startPage = datakol?.filter((items: any[]) =>
-    items.find((item: { sura: number }) => item.sura == Number(params.page))
-  );
-  const dataIndex = datakol?.findIndex(
-    (item: any[]) => item === startPage?.find((item: any[]) => item)
-  );
-
-  const fetchNextPack = async () => {
-    const nextPack = data?.pack + 1;
-    const newData = await useGetPack(nextPack);
-    if (newData) {
-      setPackAfter((prevData) => [...prevData, newData]);
-      setPackNumber(nextPack);
+  useEffect(() => {
+    function init() {
+      if (datakol && startPage) {
+        FinsIndex = datakol.findIndex((item: any) => item == startPage);
+        setInitialSlide(FinsIndex);
+      }
+    }
+    init();
+  }, [datakol, startPage]);
+  const fetchForFirstSlide = async () => {
+    try {
+      const [data]= await useGetPack(String(packSure - 1));
+      if (data) {
+        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
-  useEffect(() => {
-    if (dataIndex !== -1 && dataIndex !== undefined) {
-      setTimeout(() => {
-        swiperRef.current?.slideTo(dataIndex, 0);
-      }, 100);
-    }
-  }, [dataIndex]);
-  useEffect(() => {
-    // دریافت مقدار صفحه از کوکی یا localStorage
-    const savedPage = params.page;
-    if (savedPage) {
-      // پیدا کردن اسلاید مورد نظر بر اساس مقدار صفحه
-      const slideIndex = datakol?.findIndex((items: any) =>
-        items.some((item: any) => item.sura === parseInt(savedPage))
-      );
-      if (slideIndex !== -1) {
-        setInitialSlide(slideIndex);
+  // عملیات fetch برای اسلاید آخر
+  const fetchForLastSlide = async () => {
+    try {
+      const [data] = await useGetPack(String(packSure + 1));
+      if (data) {
+        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
       }
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  }, [datakol]);
-
+  };
+  
   return (
     <div className={`font-[Quran]`}>
       <div className="relative flex justify-around flex-col">
-        <div className="sticky top-0 w-full  z-20 ">
-          <nav className="border-black  bg-white text-typography shadow-xl pr-3  ">
-            <div className="max-w-screen-full flex flex-wrap items-center justify-between mx-auto ">
+        <div className="sticky top-0 w-full z-20 ">
+          <nav className="border-black bg-white text-typography shadow-xl pr-3">
+            <div className="max-w-screen-full flex flex-wrap items-center justify-between mx-auto">
               <button
                 data-collapse-toggle="navbar-hamburger"
                 onClick={() => setMenuBar(!menuBar)}
                 type="button"
-                className="inline-flex transform-cpu items-center justify-center  w-13 h-13 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                className="inline-flex items-center justify-center w-13 h-13 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 aria-controls="navbar-hamburger"
                 aria-expanded="false"
               >
@@ -101,7 +99,7 @@ export default function Page({ params }: PageProps) {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className=" size-6  m-0 p-0"
+                    className="size-6"
                   >
                     <path
                       strokeLinecap="round"
@@ -111,8 +109,7 @@ export default function Page({ params }: PageProps) {
                   </svg>
                 ) : (
                   <svg
-                    className="w-5 h-5 bold"
-                    aria-hidden="true"
+                    className="w-5 h-5"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 17 14"
@@ -128,20 +125,20 @@ export default function Page({ params }: PageProps) {
                 )}
               </button>
               <div className="flex justify-between items-center flex-row w-1/2">
-                <div className="flex items-center space-x-3 pr-3  rtl:space-x-reverse lg:pr-7 xl:pr-7">
+                <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
                   <div className="number_Soreh h-10 w-10 flex justify-center items-center">
                     {juzSure}
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 pr-3 rtl:space-x-reverse lg:pr-7 xl:pr-7">
+                <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
                   <Link
                     href=""
-                    className="Soreh  h-20 w-20 text-typography flex justify-evenly items-center "
+                    className="Soreh h-20 w-20 text-typography flex justify-evenly items-center"
                   >
                     {nameSure}
                   </Link>
                 </div>
-                <div className="flex items-center space-x-3 pr-3 rtl:space-x-reverse lg:pr-7 xl:pr-7">
+                <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
                   <div className="number_Soreh h-10 w-10 flex justify-center items-center">
                     {page}
                   </div>
@@ -155,7 +152,7 @@ export default function Page({ params }: PageProps) {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="size-6 m-0 p-0"
+                    className="size-6"
                   >
                     <path
                       strokeLinecap="round"
@@ -169,21 +166,26 @@ export default function Page({ params }: PageProps) {
           </nav>
           {menuBar ? <Menu /> : ""}
         </div>
-        {/* ... Other header and menu code */}
-
         <Swiper
           onClick={() => {
             setIsShow(false);
             setIsShowSpeed(false);
             setShowAuther(false);
           }}
-          hashNavigation={true}
+          key={initialSlide}
           centeredSlides={true}
-          onSwiper={(e) => e.slideTo(dataIndex)}
-          navigation={true}
           initialSlide={initialSlide}
           scrollbar={{ draggable: true }}
-          onReachEnd={fetchNextPack}
+          onSlideChange={(swiper) => {
+            if (swiper.isBeginning) {
+              console.log('You are at the first slide!');
+              fetchForFirstSlide();
+            }
+            if (swiper.isEnd) {
+              console.log('You are at the last slide!');
+              fetchForLastSlide();
+            }
+          }}
           className={`mySwiper w-full overflow-hidden bg-primary p-2 text-typography text-${textSize}xl mb-8 lg:w-3/4 mr-auto ml-auto`}
         >
           {data &&
