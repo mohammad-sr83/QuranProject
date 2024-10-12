@@ -9,17 +9,10 @@ import useGetPack from "@/app/_lib/api/FethPackGet";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./quranpage.css";
 import "swiper/css";
-import Menu from "./menu/menu";
+import Menu from "@/app/components/Navbar/Menu/Menu";
 import { setCookie } from "cookies-next";
 
-interface PageProps {
-  params: {
-    page: string;
-    aye: string;
-  };
-}
-
-export default function Page({ params }: PageProps) {
+export default function Page({ params }: any) {
   const [menuBar, setMenuBar] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [isShowSpeed, setIsShowSpeed] = useState(false);
@@ -31,20 +24,31 @@ export default function Page({ params }: PageProps) {
   const [juzSure, setJuzsura] = useState<number | null>(null);
   const [nameSure, setNamesura] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(2);
-
+  const [activeFirst, setactiveFirst] = useState(false);
   const [datakol, setDatakol] = useState<any[]>([]);
-  const [data, packSure, pageSure] = useFeth(params.page);
+  const [data, packSure, pageSure] = useFeth(params.page, params.juz);
   const swiperRef = useRef<any>(null);
   const [initialSlide, setInitialSlide] = useState(0);
-  let FinsIndex ;
+  let FinsIndex;
+
   useEffect(() => {
-    setDatakol(pageSure?.map((item: any) =>
-      data?.filter((ite: any) => ite.page == item)
-    ));
-  }, [pageSure, data])
+    setDatakol(
+      pageSure?.map((item: any) => data?.filter((ite: any) => ite.page == item))
+    );
+  }, [pageSure, data]);
   const startPage = datakol?.find((items: any[]) =>
-    items.find((item: { sura: number ,aya:number }) => item.sura == Number(params.page) && item.aya == 1)
+    items.find(
+      (item: { sura: number; aya: number }) =>
+        item.sura == Number(params.page) && item.aya == params.juz
+    )
   );
+  useEffect(() => {
+    if (startPage) {
+      setPage(startPage[0].page),
+        setNamesura(startPage[0].sura_name),
+        setJuzsura(startPage[0].juz);
+    }
+  }, [startPage]);
 
   useEffect(() => {
     function init() {
@@ -55,29 +59,29 @@ export default function Page({ params }: PageProps) {
     }
     init();
   }, [datakol, startPage]);
-  const fetchForFirstSlide = async () => {
+  const fetchForFirstSlide = () => {
     try {
-      const [data]= await useGetPack(String(packSure - 1));
+      const [data] = useGetPack(String(packSure - 1));
       if (data) {
         setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
   // عملیات fetch برای اسلاید آخر
-  const fetchForLastSlide = async () => {
+  const fetchForLastSlide = () => {
     try {
-      const [data] = await useGetPack(String(packSure + 1));
+      const [data] = useGetPack(String(packSure + 1));
       if (data) {
         setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
-  
+
   return (
     <div className={`font-[Quran]`}>
       <div className="relative flex justify-around flex-col">
@@ -178,11 +182,11 @@ export default function Page({ params }: PageProps) {
           scrollbar={{ draggable: true }}
           onSlideChange={(swiper) => {
             if (swiper.isBeginning) {
-              console.log('You are at the first slide!');
+              console.log("You are at the first slide!");
               fetchForFirstSlide();
             }
             if (swiper.isEnd) {
-              console.log('You are at the last slide!');
+              console.log("You are at the last slide!");
               fetchForLastSlide();
             }
           }}
@@ -214,7 +218,7 @@ export default function Page({ params }: PageProps) {
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
                       }}
-                      onTouchStart={()=>{
+                      onTouchStart={() => {
                         setCookie("lastSure", `${String(item.sura)}`);
                         setCookie("Juz", `${String(item.juz)}`);
                         setCookie("Page", `${String(item.page)}`);
@@ -222,15 +226,17 @@ export default function Page({ params }: PageProps) {
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
                       }}
-                      className={`text-[20px] hover:bg-slate-300 cursor-pointer lg:text-[30px]`}
+                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
                     >
-                      {item.aya == 1
-                        ? item.text?.replace(
-                            "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
-                            ""
-                          )
-                        : item.text}
-                      <span className="Aya_soreh p-2 px-auto text-center text-xs text-typography ">
+                      <span>
+                        {item.aya == 1
+                          ? item.text?.replace(
+                              "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
+                              ""
+                            )
+                          : item.text}
+                      </span>
+                      <span className=" Aya_soreh p-2 px-auto text-center text-xs text-typography  ">
                         {item.aya}
                       </span>
                     </span>

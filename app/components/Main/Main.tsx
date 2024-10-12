@@ -44,7 +44,7 @@ export default function Main() {
             loop={true}
             autoplay={{ delay: 2000 }}
           >{deta.map((items) => (
-            <SwiperSlide  key={items.sura}><div className=''><Link href={`./sure/${items.sura}/1`} key={items.sura} onClick={() => setCookie('lastSure', `${items.sura}`)} className='Soreh gap-8 cursor-pointer  text-white flex justify-evenly items-center'>{items.sura_name}</Link></div></SwiperSlide>
+            <SwiperSlide  key={items.sura}><div className=''><Link href={`./sure/${items.sura}/${1}`} key={items.sura} onClick={() => setCookie('lastSure', `${items.sura}`)} className='Soreh gap-8 cursor-pointer  text-white flex justify-evenly items-center'>{items.sura_name}</Link></div></SwiperSlide>
           ))}
           </Swiper>
         </div>
