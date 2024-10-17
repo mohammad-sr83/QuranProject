@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react'
 
-export default  function useGetPack(params:string) {
-    const [dataPack, setDataPack] = useState<[]>()
+export default function useGetPack(params: number|null) {
+    const [dataPack, setDataPack] = useState<any>(null);
+    
     useEffect(() => {
-        try {
-            const fetchdate = async (params:string) => {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${params}/`,{cache: 'no-store'})
-                const dateJson = await response.json()
-                if (dateJson) {
-                    setDataPack(dateJson?.pack)
-                    }
-                return [dataPack]
+        const fetchData = async (params: number|null) => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${params}/`, { cache: 'no-store' });
+                const dataJson = await response.json();
+                if (dataJson) {
+                    setDataPack(dataJson.pack);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-            fetchdate(params)
-        }
-        catch {
-            console.log('err')
-        }
-    },[])
-    return [dataPack]
+        };
+
+        fetchData(params);
+    }, [params]); // اضافه کردن params به وابستگی‌ها
+
+    return [dataPack];
 }

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link";
 import useFeth from "@/app/_lib/api/FethData";
-import useGetPack from "@/app/_lib/api/FethPackGet";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./quranpage.css";
 import "swiper/css";
@@ -25,17 +24,22 @@ export default function Page({ params }: any) {
   const [nameSure, setNamesura] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(2);
   const [activeFirst, setactiveFirst] = useState(false);
+  const [activeLast, setactiveLast] = useState(false);
+  const [dataFirst, setdataFirst] = useState<any[]>([]);
+  const [dataLast, setdataLast] = useState<any[]>([]);
   const [datakol, setDatakol] = useState<any[]>([]);
-  const [data, packSure, pageSure] = useFeth(params.page, params.juz);
+  const [packsura, setpacksura] = useState(0);
+  const [data, pageSure] = useFeth(params.page, params.juz);
   const swiperRef = useRef<any>(null);
   const [initialSlide, setInitialSlide] = useState(0);
   let FinsIndex;
-
+  let allSlides;
   useEffect(() => {
     setDatakol(
       pageSure?.map((item: any) => data?.filter((ite: any) => ite.page == item))
     );
   }, [pageSure, data]);
+
   const startPage = datakol?.find((items: any[]) =>
     items.find(
       (item: { sura: number; aya: number }) =>
@@ -47,6 +51,7 @@ export default function Page({ params }: any) {
       setPage(startPage[0].page),
         setNamesura(startPage[0].sura_name),
         setJuzsura(startPage[0].juz);
+      setpacksura(startPage[0].pack);
     }
   }, [startPage]);
 
@@ -59,29 +64,71 @@ export default function Page({ params }: any) {
     }
     init();
   }, [datakol, startPage]);
-  const fetchForFirstSlide = () => {
+  const fetchFirstSlides = async () => {
     try {
-      const [data] = useGetPack(String(packSure - 1));
-      if (data) {
-        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${packsura - 1}/`,
+        { cache: "no-store" }
+      );
+      const dataJson = await response.json();
+      if (dataJson) {
+        const oo = dataJson?.pack.map((item: any) => item.page);
+        const pagesurafirst =oo.filter((element:any,index:any)=>oo.indexOf(element) == index)
+          setdataFirst(
+            pagesurafirst?.map((item: any) =>
+              dataJson.pack.filter((ite: any) => ite.page == item)
+            )
+          );
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  // عملیات fetch برای اسلاید آخر
-  const fetchForLastSlide = () => {
+  const fetchLastSlides = async () => {
     try {
-      const [data] = useGetPack(String(packSure + 1));
-      if (data) {
-        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get_pack/${packsura + 1}/`,
+        { cache: "no-store" }
+      );
+      const dataJson = await response.json();
+      if (dataJson) {
+        const oo = dataJson?.pack.map((item: any) => item.page);
+        const pagesuralast =oo.filter((element:any,index:any)=>oo.indexOf(element) == index)
+          setdataLast(
+            pagesuralast?.map((item: any) =>
+              dataJson.pack.filter((ite: any) => ite.page == item)
+            )
+          )
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  useEffect(() => {
+    ///گرفتن پک بعدی
+    if (packsura) {
+      fetchLastSlides();
+      console.log(dataLast);
+    }
+  }, [activeLast]);
+  useEffect(() => {
+    //گرفتن پک قبلی
+    if (packsura) {
+      fetchFirstSlides();
+      console.log(dataFirst);
+    }
+  }, [activeFirst]);
+  const handleSlideChange = (swiper: any) => {
+    const totalSlides = swiper.slides.length; // تعداد کل اسلایدها
+    const currentIndex = swiper.activeIndex; // ایندکس اسلاید فعلی
 
+    if (currentIndex === totalSlides - 2 || currentIndex === totalSlides) {
+      setactiveLast(true);
+    }
+    if (currentIndex === 2 || currentIndex === 0) {
+      setactiveFirst(true);
+    }
+  };
   return (
     <div className={`font-[Quran]`}>
       <div className="relative flex justify-around flex-col">
@@ -180,20 +227,113 @@ export default function Page({ params }: any) {
           centeredSlides={true}
           initialSlide={initialSlide}
           scrollbar={{ draggable: true }}
-          onSlideChange={(swiper) => {
-            if (swiper.isBeginning) {
-              console.log("You are at the first slide!");
-              fetchForFirstSlide();
-            }
-            if (swiper.isEnd) {
-              console.log("You are at the last slide!");
-              fetchForLastSlide();
-            }
-          }}
+          onSlideChange={handleSlideChange}
           className={`mySwiper w-full overflow-hidden bg-primary p-2 text-typography text-${textSize}xl mb-8 lg:w-3/4 mr-auto ml-auto`}
         >
-          {data &&
+          {activeFirst && dataFirst && dataFirst?.map((items: any, index: number) => (
+              <SwiperSlide
+                key={index}
+                virtualIndex={index}
+                className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify "
+              >
+                {items.map((item: any) => (
+                  <span key={item.index}>
+                    {item.aya == 1 && (
+                      <span>
+                        <div className="nameSoreh flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
+                          {item.sura_name}
+                        </div>
+                        <div className="besm mb-6 "></div>
+                      </span>
+                    )}
+                    <span
+                      onMouseMove={() => {
+                        setCookie("lastSure", `${String(item.sura)}`);
+                        setCookie("Juz", `${String(item.juz)}`);
+                        setCookie("Page", `${String(item.page)}`);
+                        setPage(item.page);
+                        setNamesura(item.sura_name);
+                        setJuzsura(item.juz);
+                      }}
+                      onTouchStart={() => {
+                        setCookie("lastSure", `${String(item.sura)}`);
+                        setCookie("Juz", `${String(item.juz)}`);
+                        setCookie("Page", `${String(item.page)}`);
+                        setPage(item.page);
+                        setNamesura(item.sura_name);
+                        setJuzsura(item.juz);
+                      }}
+                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
+                    >
+                      <span>
+                        {item.aya == 1
+                          ? item.text?.replace(
+                              "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
+                              ""
+                            )
+                          : item.text}
+                      </span>
+                      <span className=" Aya_soreh p-2 px-auto text-center text-xs text-typography  ">
+                        {item.aya}
+                      </span>
+                    </span>
+                  </span>
+                ))}
+              </SwiperSlide>
+            ))}
+          {datakol &&
             datakol?.map((items: any, index: number) => (
+              <SwiperSlide
+                key={index}
+                virtualIndex={index}
+                className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify "
+              >
+                {items.map((item: any) => (
+                  <span key={item.index}>
+                    {item.aya == 1 && (
+                      <span>
+                        <div className="nameSoreh flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
+                          {item.sura_name}
+                        </div>
+                        <div className="besm mb-6 "></div>
+                      </span>
+                    )}
+                    <span
+                      onMouseMove={() => {
+                        setCookie("lastSure", `${String(item.sura)}`);
+                        setCookie("Juz", `${String(item.juz)}`);
+                        setCookie("Page", `${String(item.page)}`);
+                        setPage(item.page);
+                        setNamesura(item.sura_name);
+                        setJuzsura(item.juz);
+                      }}
+                      onTouchStart={() => {
+                        setCookie("lastSure", `${String(item.sura)}`);
+                        setCookie("Juz", `${String(item.juz)}`);
+                        setCookie("Page", `${String(item.page)}`);
+                        setPage(item.page);
+                        setNamesura(item.sura_name);
+                        setJuzsura(item.juz);
+                      }}
+                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
+                    >
+                      <span>
+                        {item.aya == 1
+                          ? item.text?.replace(
+                              "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
+                              ""
+                            )
+                          : item.text}
+                      </span>
+                      <span className=" Aya_soreh p-2 px-auto text-center text-xs text-typography  ">
+                        {item.aya}
+                      </span>
+                    </span>
+                  </span>
+                ))}
+              </SwiperSlide>
+            ))}
+          {activeLast && dataLast && dataLast?.map((items: any, index: number) => (
               <SwiperSlide
                 key={index}
                 virtualIndex={index}

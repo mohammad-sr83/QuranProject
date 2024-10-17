@@ -27,5 +27,5 @@ export default function useFeth(sura:number,aya:number) {
         
     }, [sura]);
 
-    return [data, packSure, pageSure];
+    return [data, pageSure];
 }
