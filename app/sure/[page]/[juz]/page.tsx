@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import AudioPlayer from "react-h5-audio-player";
+import 'react-h5-audio-player/lib/styles.css';
 import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link";
@@ -18,6 +20,7 @@ export default function Page({ params }: any) {
   const [isPlay, setIsPlay] = useState(false);
   const [isShowAuther, setShowAuther] = useState(false);
   const [auther, setAuther] = useState("الغسانی");
+  const [autherAudio, setAutherAudio] = useState("afasy");
   const [speed, setSpeed] = useState(1);
   const [page, setPage] = useState<number | null>(null);
   const [juzSure, setJuzsura] = useState<number | null>(null);
@@ -32,6 +35,9 @@ export default function Page({ params }: any) {
   const [data, pageSure] = useFeth(params.page, params.juz);
   const swiperRef = useRef<any>(null);
   const [initialSlide, setInitialSlide] = useState(0);
+  const [activeAya, setActiveAya] = useState<string | null>(null);
+  const [currentAyahIndex, setCurrentAyahIndex] = useState(0);
+  const [AyeSuraAudio, setAyeSuraAudio] = useState<string>("");
   let FinsIndex;
   let allSlides;
   useEffect(() => {
@@ -73,12 +79,15 @@ export default function Page({ params }: any) {
       const dataJson = await response.json();
       if (dataJson) {
         const oo = dataJson?.pack.map((item: any) => item.page);
-        const pagesurafirst =oo.filter((element:any,index:any)=>oo.indexOf(element) == index)
-          setdataFirst(
-            pagesurafirst?.map((item: any) =>
-              dataJson.pack.filter((ite: any) => ite.page == item)
-            )
-          );
+        const pagesurafirst = oo.filter(
+          (element: any, index: any) => oo.indexOf(element) == index
+        );
+        setdataFirst(
+          pagesurafirst?.map((item: any) =>
+            dataJson.pack.filter((ite: any) => ite.page == item)
+          )
+        );
+        setDatakol((prev) => [...dataFirst, ...prev, ...dataLast]);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -93,12 +102,15 @@ export default function Page({ params }: any) {
       const dataJson = await response.json();
       if (dataJson) {
         const oo = dataJson?.pack.map((item: any) => item.page);
-        const pagesuralast =oo.filter((element:any,index:any)=>oo.indexOf(element) == index)
-          setdataLast(
-            pagesuralast?.map((item: any) =>
-              dataJson.pack.filter((ite: any) => ite.page == item)
-            )
+        const pagesuralast = oo.filter(
+          (element: any, index: any) => oo.indexOf(element) == index
+        );
+        setdataLast(
+          pagesuralast?.map((item: any) =>
+            dataJson.pack.filter((ite: any) => ite.page == item)
           )
+        );
+        setDatakol((prev) => [...dataFirst, ...prev, ...dataLast]);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -108,20 +120,24 @@ export default function Page({ params }: any) {
     ///گرفتن پک بعدی
     if (packsura) {
       fetchLastSlides();
-      console.log(dataLast);
     }
   }, [activeLast]);
   useEffect(() => {
     //گرفتن پک قبلی
     if (packsura) {
       fetchFirstSlides();
-      console.log(dataFirst);
     }
   }, [activeFirst]);
   const handleSlideChange = (swiper: any) => {
     const totalSlides = swiper.slides.length; // تعداد کل اسلایدها
     const currentIndex = swiper.activeIndex; // ایندکس اسلاید فعلی
 
+    // به‌روزرسانی URL بر اساس آیتم اولین آیتم در هر اسلاید
+    const firstItem = datakol[currentIndex][0];
+    if (firstItem) {
+      const newUrl = `/sure/${firstItem.sura}/${firstItem.aya}`;
+      window.history.pushState(null, "", newUrl);
+    }
     if (currentIndex === totalSlides - 2 || currentIndex === totalSlides) {
       setactiveLast(true);
     }
@@ -129,6 +145,11 @@ export default function Page({ params }: any) {
       setactiveFirst(true);
     }
   };
+
+  const handleEnded = () => {
+    setAyeSuraAudio((prev)=>prev+1)
+  };
+
   return (
     <div className={`font-[Quran]`}>
       <div className="relative flex justify-around flex-col">
@@ -230,57 +251,6 @@ export default function Page({ params }: any) {
           onSlideChange={handleSlideChange}
           className={`mySwiper w-full overflow-hidden bg-primary p-2 text-typography text-${textSize}xl mb-8 lg:w-3/4 mr-auto ml-auto`}
         >
-          {activeFirst && dataFirst && dataFirst?.map((items: any, index: number) => (
-              <SwiperSlide
-                key={index}
-                virtualIndex={index}
-                className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify "
-              >
-                {items.map((item: any) => (
-                  <span key={item.index}>
-                    {item.aya == 1 && (
-                      <span>
-                        <div className="nameSoreh flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
-                          {item.sura_name}
-                        </div>
-                        <div className="besm mb-6 "></div>
-                      </span>
-                    )}
-                    <span
-                      onMouseMove={() => {
-                        setCookie("lastSure", `${String(item.sura)}`);
-                        setCookie("Juz", `${String(item.juz)}`);
-                        setCookie("Page", `${String(item.page)}`);
-                        setPage(item.page);
-                        setNamesura(item.sura_name);
-                        setJuzsura(item.juz);
-                      }}
-                      onTouchStart={() => {
-                        setCookie("lastSure", `${String(item.sura)}`);
-                        setCookie("Juz", `${String(item.juz)}`);
-                        setCookie("Page", `${String(item.page)}`);
-                        setPage(item.page);
-                        setNamesura(item.sura_name);
-                        setJuzsura(item.juz);
-                      }}
-                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
-                    >
-                      <span>
-                        {item.aya == 1
-                          ? item.text?.replace(
-                              "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
-                              ""
-                            )
-                          : item.text}
-                      </span>
-                      <span className=" Aya_soreh p-2 px-auto text-center text-xs text-typography  ">
-                        {item.aya}
-                      </span>
-                    </span>
-                  </span>
-                ))}
-              </SwiperSlide>
-            ))}
           {datakol &&
             datakol?.map((items: any, index: number) => (
               <SwiperSlide
@@ -288,7 +258,7 @@ export default function Page({ params }: any) {
                 virtualIndex={index}
                 className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify "
               >
-                {items.map((item: any) => (
+                {items.map((item: any, itemIndex: number) => (
                   <span key={item.index}>
                     {item.aya == 1 && (
                       <span>
@@ -299,7 +269,25 @@ export default function Page({ params }: any) {
                       </span>
                     )}
                     <span
-                      onMouseMove={() => {
+                      onClick={() => {
+                        setActiveAya(`${item.sura}-${item.aya}`);
+                        setAyeSuraAudio(
+                          `${
+                            item.sura < 10
+                              ? "00" + item.sura
+                              : item.sura < 100
+                              ? "0" + item.sura
+                              : ""
+                          }${
+                            item.aya < 10
+                              ? "00" + item.aya
+                              : item.aya < 999
+                              ? "0" + item.aya
+                              : ""
+                          }`
+                        );
+                      }}
+                      onMouseDown={() => {
                         setCookie("lastSure", `${String(item.sura)}`);
                         setCookie("Juz", `${String(item.juz)}`);
                         setCookie("Page", `${String(item.page)}`);
@@ -308,6 +296,7 @@ export default function Page({ params }: any) {
                         setJuzsura(item.juz);
                       }}
                       onTouchStart={() => {
+                        setActiveAya(`${item.sura}-${item.aya}`);
                         setCookie("lastSure", `${String(item.sura)}`);
                         setCookie("Juz", `${String(item.juz)}`);
                         setCookie("Page", `${String(item.page)}`);
@@ -315,58 +304,11 @@ export default function Page({ params }: any) {
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
                       }}
-                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
-                    >
-                      <span>
-                        {item.aya == 1
-                          ? item.text?.replace(
-                              "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
-                              ""
-                            )
-                          : item.text}
-                      </span>
-                      <span className=" Aya_soreh p-2 px-auto text-center text-xs text-typography  ">
-                        {item.aya}
-                      </span>
-                    </span>
-                  </span>
-                ))}
-              </SwiperSlide>
-            ))}
-          {activeLast && dataLast && dataLast?.map((items: any, index: number) => (
-              <SwiperSlide
-                key={index}
-                virtualIndex={index}
-                className="h-full p-3 cursor-pointer flex justify-center items-center leading-loose text-justify "
-              >
-                {items.map((item: any) => (
-                  <span key={item.index}>
-                    {item.aya == 1 && (
-                      <span>
-                        <div className="nameSoreh flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
-                          {item.sura_name}
-                        </div>
-                        <div className="besm mb-6 "></div>
-                      </span>
-                    )}
-                    <span
-                      onMouseMove={() => {
-                        setCookie("lastSure", `${String(item.sura)}`);
-                        setCookie("Juz", `${String(item.juz)}`);
-                        setCookie("Page", `${String(item.page)}`);
-                        setPage(item.page);
-                        setNamesura(item.sura_name);
-                        setJuzsura(item.juz);
-                      }}
-                      onTouchStart={() => {
-                        setCookie("lastSure", `${String(item.sura)}`);
-                        setCookie("Juz", `${String(item.juz)}`);
-                        setCookie("Page", `${String(item.page)}`);
-                        setPage(item.page);
-                        setNamesura(item.sura_name);
-                        setJuzsura(item.juz);
-                      }}
-                      className={` text-[20px]  hover:bg-slate-300 cursor-pointer lg:text-[30px] `}
+                      className={`text-[20px] hover:bg-slate-200 cursor-pointer lg:text-[30px] ${
+                        activeAya === `${item.sura}-${item.aya}`
+                          ? "bg-slate-300 "
+                          : ""
+                      }`}
                     >
                       <span>
                         {item.aya == 1
@@ -390,7 +332,7 @@ export default function Page({ params }: any) {
         {menuBar ? (
           ""
         ) : (
-          <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center   h-11  z-10 border-black  shadow-xl pr-3 ">
+          <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center   h-28  z-10 border-black  shadow-xl pr-3 ">
             {/* برای جایگذاری پلی لیست   */}
             <div className=" cursor-pointer">
               {isShow && (
@@ -454,7 +396,7 @@ export default function Page({ params }: any) {
                 </ul>
               )}
               <div
-                className="mt-4 fixed bottom-3 mr-2"
+                className=" fixed bottom-3 mr-2"
                 onClick={() => {
                   setIsShow(!isShow);
                   setShowAuther(false);
@@ -503,56 +445,24 @@ export default function Page({ params }: any) {
                 {speed}x
               </span>
             </div>
-            <button className="p-2 lg:p-10 xl:p-10">
-              {isPlay ? (
-                <svg
-                  onClick={() => {
-                    setIsPlay(!isPlay);
-                    setIsShow(false);
-                    setIsShowSpeed(false);
-                    setShowAuther(false);
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  onClick={() => {
-                    setIsPlay(!isPlay);
-                    setIsShow(false);
-                    setIsShowSpeed(false);
-                    setShowAuther(false);
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-                  />
-                </svg>
-              )}
-            </button>
+            <span className="flex justify-between flex-row lg:p-10 xl:p-10">
+              <AudioPlayer
+                src={`https://tanzil.net/res/audio/${autherAudio}/${AyeSuraAudio}.mp3`}
+                onEnded={handleEnded} // وقتی آیه تموم شد
+                autoPlay
+                showJumpControls={false}    
+                showDownloadProgress={false} 
+                className="w-48 h-28 flex justify-between flex-row"
+              />
+            </span>
             <div className="cursor-pointer">
               {isShowAuther && (
                 <ul className="mb-6 fixed flex justify-center flex-col bottom-6 right-auto">
                   <button
-                    onClick={() => setAuther("پرهیزکار")}
+                    onClick={() => {
+                      setAuther("پرهیزکار");
+                      setAutherAudio("parhizgar");
+                    }}
                     className={`${
                       auther == "پرهیزکار" && "bg-orange-500"
                     }  bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
@@ -560,7 +470,10 @@ export default function Page({ params }: any) {
                     پرهیزکار
                   </button>
                   <button
-                    onClick={() => setAuther("عبدالواسط")}
+                    onClick={() => {
+                      setAuther("عبدالواسط");
+                      setAutherAudio("abdulbasit");
+                    }}
                     className={`${
                       auther == "عبدالواسط" && "bg-orange-500"
                     } bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
@@ -568,15 +481,21 @@ export default function Page({ params }: any) {
                     عبدالواسط
                   </button>
                   <button
-                    onClick={() => setAuther("المنشاوی")}
+                    onClick={() => {
+                      setAuther("المنشاوي");
+                      setAutherAudio("minshawi");
+                    }}
                     className={`${
-                      auther == "المنشاوی" && "bg-orange-500"
+                      auther == "المنشاوي" && "bg-orange-500"
                     }  bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
                   >
                     المنشاوی
                   </button>
                   <button
-                    onClick={() => setAuther("الغسانی")}
+                    onClick={() => {
+                      setAuther("الغسانی");
+                      setAutherAudio("afasy");
+                    }}
                     className={`${
                       auther == "الغسانی" && "bg-orange-500"
                     } bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
