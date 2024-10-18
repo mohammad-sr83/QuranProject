@@ -287,7 +287,7 @@ export default function Page({ params }: any) {
                           }`
                         );
                       }}
-                      onMouseDown={() => {
+                      onMouseMove={() => {
                         setCookie("lastSure", `${String(item.sura)}`);
                         setCookie("Juz", `${String(item.juz)}`);
                         setCookie("Page", `${String(item.page)}`);
