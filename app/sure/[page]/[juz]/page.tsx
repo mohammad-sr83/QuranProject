@@ -277,13 +277,13 @@ export default function Page({ params }: any) {
                               ? "00" + item.sura
                               : item.sura < 100
                               ? "0" + item.sura
-                              : ""
+                              : item.sura
                           }${
                             item.aya < 10
-                              ? "00" + item.aya
-                              : item.aya < 999
-                              ? "0" + item.aya
-                              : ""
+                            ? "00" + item.aya
+                            : item.aya < 100
+                            ? "0" + item.aya
+                            : item.aya
                           }`
                         );
                       }}
@@ -332,7 +332,7 @@ export default function Page({ params }: any) {
         {menuBar ? (
           ""
         ) : (
-          <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center   h-28  z-10 border-black  shadow-xl pr-3 ">
+          <footer className="w-full p-3 bg-white fixed bottom-0  flex justify-between items-center   h-14  z-10 border-black  shadow-xl pr-3 ">
             {/* برای جایگذاری پلی لیست   */}
             <div className=" cursor-pointer">
               {isShow && (
@@ -450,9 +450,12 @@ export default function Page({ params }: any) {
                 src={`https://tanzil.net/res/audio/${autherAudio}/${AyeSuraAudio}.mp3`}
                 onEnded={handleEnded} // وقتی آیه تموم شد
                 autoPlay
-                showJumpControls={false}    
-                showDownloadProgress={false} 
-                className="w-48 h-28 flex justify-between flex-row"
+                showJumpControls={false}  // پنهان کردن دکمه‌های پرش
+                showDownloadProgress={false}  // پنهان کردن نوار پیشرفت دانلود
+                showFilledProgress={false}  // پنهان کردن نوار پیشرفت پر شده
+                showSkipControls={false}
+                customAdditionalControls={[]} // پنهان کردن کنترل‌های اضافی
+                className="w-48 h-28 border-none"
               />
             </span>
             <div className="cursor-pointer">
