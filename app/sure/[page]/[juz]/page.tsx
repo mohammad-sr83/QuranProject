@@ -39,7 +39,8 @@ export default function Page({ params }: any) {
   const [AyeSuraAudio, setAyeSuraAudio] = useState<string>("");
   const [currentSura, setCurrentSura] = useState(0);
   const [currentAya, setCurrentAya] = useState(0);
-  const [activeAya, setActiveAya] = useState(`00000`);
+  const [activeAya, setActiveAya] = useState('00');
+  const [activeindex, setactiveindex] = useState(0);
   let FinsIndex;
   let allSlides;
   useEffect(() => {
@@ -131,7 +132,7 @@ export default function Page({ params }: any) {
   const handleSlideChange = (swiper: any) => {
     const totalSlides = swiper.slides.length;
     const currentIndex = swiper.activeIndex;
-
+    setactiveindex(swiper.activeIndex)
     const firstItem = datakol[currentIndex][0];
     if (firstItem) {
       const newUrl = `/sure/${firstItem.sura}/${firstItem.aya}`;
@@ -166,23 +167,27 @@ export default function Page({ params }: any) {
     );
     setActiveAya(`${currentSura}${currentAya}`);
   }, [currentSura, currentAya]);
+  if (activeindex>0) {
+    console.log(datakol[activeindex]);
+  }
   const handleEnded = () => {
     // پیدا کردن آیه بعدی
-    const currentSuraIndex = datakol.findIndex(
-      (items) => items[0].sura === currentSura
+
+    const currentSuraIndex = datakol[activeindex].findIndex(
+      (items:any) => items.sura === currentSura
     );
-    const currentAyaIndex = datakol[currentSuraIndex].findIndex(
+    
+    const currentAyaIndex = datakol[activeindex].findIndex(
       (item: any) => item.aya === currentAya
     );
-
     // اگر آیه بعدی در همان سوره وجود دارد
-    if (currentAyaIndex < datakol[currentSuraIndex].length - 1) {
-      setCurrentAya(datakol[currentSuraIndex][currentAyaIndex + 1].aya);
+    if (currentAyaIndex < datakol[activeindex].length - 1) {
+      setCurrentAya(datakol[activeindex][currentAyaIndex + 1].aya);
     } else {
       // اگر آیه در سوره بعدی است
       if (currentSuraIndex < datakol.length - 1) {
-        setCurrentSura(datakol[currentSuraIndex + 1][0].sura);
-        setCurrentAya(datakol[currentSuraIndex + 1][0].aya);
+        setCurrentSura(datakol[activeindex + 1][0].sura);
+        setCurrentAya(datakol[activeindex + 1][0].aya);
       }
     }
   };
@@ -311,21 +316,7 @@ export default function Page({ params }: any) {
                         setCurrentSura(item.sura);
                         setCurrentAya(item.aya);
                         setActiveAya(`${item.sura}${item.aya}`);
-                        setAyeSuraAudio(
-                          `${
-                            item.sura < 10
-                              ? "00" + item.sura
-                              : item.sura < 100
-                              ? "0" + item.sura
-                              : item.sura
-                          }${
-                            item.aya < 10
-                              ? "00" + item.aya
-                              : item.aya < 100
-                              ? "0" + item.aya
-                              : item.aya
-                          }`
-                        );
+                        
                       }}
                       onMouseMove={() => {
                         setCookie("lastSure", `${String(item.sura)}`);
@@ -491,7 +482,6 @@ export default function Page({ params }: any) {
               <AudioPlayer
                 src={`https://tanzil.net/res/audio/${autherAudio}/${AyeSuraAudio}.mp3`}
                 onEnded={handleEnded}
-                autoPlay
                 showJumpControls={false}
                 customProgressBarSection={[]}
                 layout="horizontal-reverse"
