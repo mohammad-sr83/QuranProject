@@ -493,7 +493,6 @@ export default function Page({ params }: any) {
                 onEnded={handleEnded}
                 autoPlay
                 showJumpControls={false}
-                customAdditionalControls={[]}
                 customProgressBarSection={[]}
                 layout="horizontal-reverse"
                 className="w-48 border-none"
