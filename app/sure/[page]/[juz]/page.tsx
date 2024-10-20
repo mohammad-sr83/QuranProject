@@ -19,12 +19,17 @@ export default function Page({ params }: any) {
   const [isPlay, setIsPlay] = useState(false);
   const [isShowAuther, setShowAuther] = useState(false);
   const [auther, setAuther] = useState("الغسانی");
+<<<<<<< HEAD
   const [autherAudio, setAutherAudio] = useState("afasy");
   const [speed, setSpeed] = useState(1.00);
+=======
+  const [speed, setSpeed] = useState(1);
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
   const [page, setPage] = useState<number | null>(null);
   const [juzSure, setJuzsura] = useState<number | null>(null);
   const [nameSure, setNamesura] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(2);
+<<<<<<< HEAD
   const [activeFirst, setactiveFirst] = useState(false);
   const [activeLast, setactiveLast] = useState(false);
   const [dataFirst, setdataFirst] = useState<any[]>([]);
@@ -59,6 +64,22 @@ export default function Page({ params }: any) {
       setpacksura(startPage[0].pack);
     }
   }, [startPage]);
+=======
+
+  const [datakol, setDatakol] = useState<any[]>([]);
+  const [data, packSure, pageSure] = useFeth(params.page);
+  const swiperRef = useRef<any>(null);
+  const [initialSlide, setInitialSlide] = useState(0);
+  let FinsIndex ;
+  useEffect(() => {
+    setDatakol(pageSure?.map((item: any) =>
+      data?.filter((ite: any) => ite.page == item)
+    ));
+  }, [pageSure, data])
+  const startPage = datakol?.find((items: any[]) =>
+    items.find((item: { sura: number ,aya:number }) => item.sura == Number(params.page) && item.aya == 1)
+  );
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
 
   useEffect(() => {
     function init() {
@@ -69,6 +90,7 @@ export default function Page({ params }: any) {
     }
     init();
   }, [datakol, startPage]);
+<<<<<<< HEAD
   const fetchFirstSlides = async () => {
     try {
       const response = await fetch(
@@ -181,10 +203,35 @@ export default function Page({ params }: any) {
       if (currentSuraIndex < datakol.length - 1) {
         setCurrentSura(datakol[activeindex + 1][0].sura);
         setCurrentAya(datakol[activeindex + 1][0].aya);
+=======
+  const fetchForFirstSlide = async () => {
+    try {
+      const [data]= await useGetPack(String(packSure - 1));
+      if (data) {
+        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
       }
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
+  // عملیات fetch برای اسلاید آخر
+  const fetchForLastSlide = async () => {
+    try {
+      const [data] = await useGetPack(String(packSure + 1));
+      if (data) {
+        setDatakol((prevData) => [...prevData, ...data]); // اضافه کردن داده‌های جدید به داده‌های قبلی
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+<<<<<<< HEAD
+
+=======
+  
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
   return (
     <div className={`font-[Quran]`}>
       <div className="relative flex justify-around flex-col">
@@ -233,20 +280,32 @@ export default function Page({ params }: any) {
               </button>
               <div className="flex justify-between items-center flex-row w-1/2">
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
+<<<<<<< HEAD
                   <div className="number_Soreh font-almarai-bold h-10 w-10 flex justify-center items-center">
+=======
+                  <div className="number_Soreh h-10 w-10 flex justify-center items-center">
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
                     {juzSure}
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
                   <Link
                     href=""
+<<<<<<< HEAD
                     className="Soreh h-20 w-20 text-white font-uthmani flex justify-evenly items-center"
+=======
+                    className="Soreh h-20 w-20 text-typography flex justify-evenly items-center"
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
                   >
                     {nameSure}
                   </Link>
                 </div>
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
+<<<<<<< HEAD
                   <div className="number_Soreh h-10 font-almarai-bold font-normal w-10 flex justify-center items-center">
+=======
+                  <div className="number_Soreh h-10 w-10 flex justify-center items-center">
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
                     {page}
                   </div>
                 </div>
@@ -283,7 +342,20 @@ export default function Page({ params }: any) {
           centeredSlides={true}
           initialSlide={initialSlide}
           scrollbar={{ draggable: true }}
+<<<<<<< HEAD
           onSlideChange={handleSlideChange}
+=======
+          onSlideChange={(swiper) => {
+            if (swiper.isBeginning) {
+              console.log('You are at the first slide!');
+              fetchForFirstSlide();
+            }
+            if (swiper.isEnd) {
+              console.log('You are at the last slide!');
+              fetchForLastSlide();
+            }
+          }}
+>>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
           className={`mySwiper w-full overflow-hidden bg-primary p-2 text-typography text-${textSize}xl mb-8 lg:w-3/4 mr-auto ml-auto`}
         >
           {datakol &&
