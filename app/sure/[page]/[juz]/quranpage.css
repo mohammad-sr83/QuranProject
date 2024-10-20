@@ -73,11 +73,11 @@
     width: 26px;
     height: 26px;
     color: #7387fa;
-    margin-right: 6px;
+    /* margin-right: 6px; */
   }
   
   .rhap_main-controls-button {
-    margin: 0 3px;
+    /* margin: 0 3px; */
     color: #7387fa;
     font-size: 35px;
     width: 35px;
@@ -89,6 +89,6 @@
     width: 26px;
     height: 26px;
     color: #7387fa;
-    margin-right: 6px;
+    /* margin-right: 6px; */
   }
   

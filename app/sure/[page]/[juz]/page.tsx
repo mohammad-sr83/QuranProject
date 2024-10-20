@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import AudioPlayer from "react-h5-audio-player";
-import 'react-h5-audio-player/lib/styles.css';
+import "react-h5-audio-player/lib/styles.css";
 import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import useFeth from "@/app/_lib/api/FethData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./quranpage.css";
 import "swiper/css";
-import Menu from "@/app/components/Navbar/Menu/Menu";
+import MenuSuraAye from "@/app/components/Navbar/Menu/MenuSuraAye";
 import { setCookie } from "cookies-next";
 
 export default function Page({ params }: any) {
@@ -35,9 +35,10 @@ export default function Page({ params }: any) {
   const [data, pageSure] = useFeth(params.page, params.juz);
   const swiperRef = useRef<any>(null);
   const [initialSlide, setInitialSlide] = useState(0);
-  const [activeAya, setActiveAya] = useState<string | null>(null);
-  const [currentAyahIndex, setCurrentAyahIndex] = useState(0);
   const [AyeSuraAudio, setAyeSuraAudio] = useState<string>("");
+  const [currentSura, setCurrentSura] = useState(0);
+  const [currentAya, setCurrentAya] = useState(0);
+  const [activeAya, setActiveAya] = useState(`00000`);
   let FinsIndex;
   let allSlides;
   useEffect(() => {
@@ -117,37 +118,73 @@ export default function Page({ params }: any) {
     }
   };
   useEffect(() => {
-    ///گرفتن پک بعدی
     if (packsura) {
       fetchLastSlides();
     }
   }, [activeLast]);
   useEffect(() => {
-    //گرفتن پک قبلی
     if (packsura) {
       fetchFirstSlides();
     }
   }, [activeFirst]);
   const handleSlideChange = (swiper: any) => {
-    const totalSlides = swiper.slides.length; // تعداد کل اسلایدها
-    const currentIndex = swiper.activeIndex; // ایندکس اسلاید فعلی
+    const totalSlides = swiper.slides.length;
+    const currentIndex = swiper.activeIndex;
+   
 
-    // به‌روزرسانی URL بر اساس آیتم اولین آیتم در هر اسلاید
     const firstItem = datakol[currentIndex][0];
     if (firstItem) {
       const newUrl = `/sure/${firstItem.sura}/${firstItem.aya}`;
       window.history.pushState(null, "", newUrl);
     }
-    if (currentIndex === totalSlides - 2 || currentIndex === totalSlides) {
-      setactiveLast(true);
+    if (currentIndex >= totalSlides - 2) {
+      setactiveLast(!activeLast);
+      swiper.slideTo(currentIndex + datakol.length, 0)
     }
-    if (currentIndex === 2 || currentIndex === 0) {
-      setactiveFirst(true);
+    if (currentIndex <= 1) {
+      setactiveFirst(!activeFirst);
+      swiper.slideTo(currentIndex,0);
     }
   };
 
+  useEffect(() => {
+    // ساختن URL آیه بر اساس سوره و آیه فعلی
+    setAyeSuraAudio(
+      `${
+        currentSura < 10
+          ? "00" + currentSura
+          : currentSura < 100
+          ? "0" + currentSura
+          : currentSura
+      }${
+        currentAya < 10
+          ? "00" + currentAya
+          : currentAya < 100
+          ? "0" + currentAya
+          : currentAya
+      }`
+    );
+    setActiveAya(`${currentSura}${currentAya}`)
+  }, [currentSura, currentAya]);
   const handleEnded = () => {
-    setAyeSuraAudio((prev)=>prev+1)
+       // پیدا کردن آیه بعدی
+       const currentSuraIndex = datakol.findIndex(
+        (items) => items[0].sura === currentSura
+      );
+      const currentAyaIndex = datakol[currentSuraIndex].findIndex(
+        (item:any) => item.aya === currentAya
+      );
+  
+      // اگر آیه بعدی در همان سوره وجود دارد
+      if (currentAyaIndex < datakol[currentSuraIndex].length - 1) {
+        setCurrentAya(datakol[currentSuraIndex][currentAyaIndex + 1].aya);
+      } else {
+        // اگر آیه در سوره بعدی است
+        if (currentSuraIndex < datakol.length - 1) {
+          setCurrentSura(datakol[currentSuraIndex + 1][0].sura);
+          setCurrentAya(datakol[currentSuraIndex + 1][0].aya);
+        }
+      }
   };
 
   return (
@@ -236,7 +273,7 @@ export default function Page({ params }: any) {
               </div>
             </div>
           </nav>
-          {menuBar ? <Menu /> : ""}
+          {menuBar ? <MenuSuraAye /> : ""}
         </div>
         <Swiper
           onClick={() => {
@@ -271,6 +308,9 @@ export default function Page({ params }: any) {
                     <span
                       onClick={() => {
                         setActiveAya(`${item.sura}-${item.aya}`);
+                        setCurrentSura(item.sura)
+                        setCurrentAya(item.aya)
+                        setActiveAya(`${item.sura}${item.aya}`)
                         setAyeSuraAudio(
                           `${
                             item.sura < 10
@@ -280,10 +320,10 @@ export default function Page({ params }: any) {
                               : item.sura
                           }${
                             item.aya < 10
-                            ? "00" + item.aya
-                            : item.aya < 100
-                            ? "0" + item.aya
-                            : item.aya
+                              ? "00" + item.aya
+                              : item.aya < 100
+                              ? "0" + item.aya
+                              : item.aya
                           }`
                         );
                       }}
@@ -294,6 +334,7 @@ export default function Page({ params }: any) {
                         setPage(item.page);
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
+                        setpacksura(item.pack);
                       }}
                       onTouchStart={() => {
                         setActiveAya(`${item.sura}-${item.aya}`);
@@ -303,9 +344,10 @@ export default function Page({ params }: any) {
                         setPage(item.page);
                         setNamesura(item.sura_name);
                         setJuzsura(item.juz);
+                        setpacksura(item.pack);
                       }}
                       className={`text-[20px] hover:bg-slate-200 cursor-pointer lg:text-[30px] ${
-                        activeAya === `${item.sura}-${item.aya}`
+                        activeAya === `${item.sura}${item.aya}`
                           ? "bg-slate-300 "
                           : ""
                       }`}
@@ -448,14 +490,14 @@ export default function Page({ params }: any) {
             <span className="flex justify-between flex-row lg:p-10 xl:p-10">
               <AudioPlayer
                 src={`https://tanzil.net/res/audio/${autherAudio}/${AyeSuraAudio}.mp3`}
-                onEnded={handleEnded} // وقتی آیه تموم شد
+                onEnded={handleEnded}
                 autoPlay
-                showJumpControls={false}  // پنهان کردن دکمه‌های پرش
-                showDownloadProgress={false}  // پنهان کردن نوار پیشرفت دانلود
-                showFilledProgress={false}  // پنهان کردن نوار پیشرفت پر شده
-                showSkipControls={false}
-                customAdditionalControls={[]} // پنهان کردن کنترل‌های اضافی
-                className="w-48 h-28 border-none"
+                showJumpControls={false} 
+                customAdditionalControls={[]} 
+                customControlsSection={["MAIN_CONTROLS"]} 
+                customProgressBarSection={[]} 
+                layout="horizontal-reverse" 
+                className="w-48  border-none"
               />
             </span>
             <div className="cursor-pointer">

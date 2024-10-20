@@ -6,14 +6,27 @@ import './Menu.css'
 import Link from 'next/link';
 import { getCookie, setCookie } from 'cookies-next';
 
-export default function Menu() {
+export default function MenuSuraAye() {
   const [sure_list, setsure_list] = useState(true);
   const [page_list, sepage_list] = useState(false);
   const [jus_list, setjus_list] = useState(false);
   const sure = quran.sura_list;
   const juz = QuranData.Juz;
   const page = QuranData.Page;
+  
+  const PageOnline = getCookie('lastSure');
+  const Page = getCookie('Page');
+  const Juz = getCookie('Juz');
 
+  useEffect(() => {
+    const activeElement = document.querySelector('.hold');
+    if (activeElement) {
+      activeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [sure_list, page_list, jus_list]); // این بخش هر زمان که کاربر بین سوره، صفحه و جز جابجا شود، اجرا می‌شود
 
   return (
     <div className='fixed transition-all z-20 ms:w-1/4 h-full flex border-t-0 pb-16 lg:w-1/4 md:w-1/4 w-full'>
@@ -40,21 +53,21 @@ export default function Menu() {
           <div className="bg-slate-100 overflow-y-auto flex text-center justify-center flex-col">
             {sure_list && sure.map((item) => (
               <Link href={`../${item.sura}/1`} key={item.sura} onClick={() => setCookie('lastSure', `${item.sura}`)}
-                className={` h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
+                className={`${item.sura == Number(PageOnline) && 'bg-slate-400 snap-center hold'} h-13 hover:bg-slate-300 p-2 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
                 {item.sura}- {item.sura_name}
               </Link>
             ))}
 
             {page_list && page.map((item,index) => (
               <Link href={`/sure/${item[0]}/${item[1]}`} key={index} onClick={() => setCookie('lastSure', `${item}`)}
-                className={` h-13 p-2 hover:bg-slate-300 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
+                className={`${index+1 == Number(Page) && 'bg-slate-400 snap-center hold'} h-13 p-2 hover:bg-slate-300 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
                 صفحه -{index+1}
               </Link>
             ))}
 
             {jus_list && juz.map((item,index) => (
               <Link href={`/sure/${item[0]}/${item[1]}`} key={index}
-                className={` h-13 p-2 hover:bg-slate-300 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
+                className={`${index+1 == Number(Juz) && 'bg-slate-400 snap-center hold '} h-13 p-2 hover:bg-slate-300 font-bold cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
                 جزء-{index+1}
               </Link>
             ))}
