@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import AudioPlayer from "react-h5-audio-player";
+import AudioPlayer from "react-h5-audio-player"; 
 import "react-h5-audio-player/lib/styles.css";
 import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
@@ -12,6 +12,7 @@ import "./quranpage.css";
 import "swiper/css";
 import MenuSuraAye from "@/app/components/Navbar/Menu/MenuSuraAye";
 import { setCookie } from "cookies-next";
+
 
 export default function Page({ params }: any) {
   const [menuBar, setMenuBar] = useState(false);
@@ -130,7 +131,6 @@ export default function Page({ params }: any) {
   const handleSlideChange = (swiper: any) => {
     const totalSlides = swiper.slides.length;
     const currentIndex = swiper.activeIndex;
-   
 
     const firstItem = datakol[currentIndex][0];
     if (firstItem) {
@@ -139,11 +139,11 @@ export default function Page({ params }: any) {
     }
     if (currentIndex >= totalSlides - 2) {
       setactiveLast(!activeLast);
-      swiper.slideTo(currentIndex + datakol.length, 0)
+      swiper.slideTo(currentIndex + datakol.length, 0);
     }
     if (currentIndex <= 1) {
       setactiveFirst(!activeFirst);
-      swiper.slideTo(currentIndex,0);
+      swiper.slideTo(currentIndex, 0);
     }
   };
 
@@ -164,27 +164,27 @@ export default function Page({ params }: any) {
           : currentAya
       }`
     );
-    setActiveAya(`${currentSura}${currentAya}`)
+    setActiveAya(`${currentSura}${currentAya}`);
   }, [currentSura, currentAya]);
   const handleEnded = () => {
-       // پیدا کردن آیه بعدی
-       const currentSuraIndex = datakol.findIndex(
-        (items) => items[0].sura === currentSura
-      );
-      const currentAyaIndex = datakol[currentSuraIndex].findIndex(
-        (item:any) => item.aya === currentAya
-      );
-  
-      // اگر آیه بعدی در همان سوره وجود دارد
-      if (currentAyaIndex < datakol[currentSuraIndex].length - 1) {
-        setCurrentAya(datakol[currentSuraIndex][currentAyaIndex + 1].aya);
-      } else {
-        // اگر آیه در سوره بعدی است
-        if (currentSuraIndex < datakol.length - 1) {
-          setCurrentSura(datakol[currentSuraIndex + 1][0].sura);
-          setCurrentAya(datakol[currentSuraIndex + 1][0].aya);
-        }
+    // پیدا کردن آیه بعدی
+    const currentSuraIndex = datakol.findIndex(
+      (items) => items[0].sura === currentSura
+    );
+    const currentAyaIndex = datakol[currentSuraIndex].findIndex(
+      (item: any) => item.aya === currentAya
+    );
+
+    // اگر آیه بعدی در همان سوره وجود دارد
+    if (currentAyaIndex < datakol[currentSuraIndex].length - 1) {
+      setCurrentAya(datakol[currentSuraIndex][currentAyaIndex + 1].aya);
+    } else {
+      // اگر آیه در سوره بعدی است
+      if (currentSuraIndex < datakol.length - 1) {
+        setCurrentSura(datakol[currentSuraIndex + 1][0].sura);
+        setCurrentAya(datakol[currentSuraIndex + 1][0].aya);
       }
+    }
   };
 
   return (
@@ -308,9 +308,9 @@ export default function Page({ params }: any) {
                     <span
                       onClick={() => {
                         setActiveAya(`${item.sura}-${item.aya}`);
-                        setCurrentSura(item.sura)
-                        setCurrentAya(item.aya)
-                        setActiveAya(`${item.sura}${item.aya}`)
+                        setCurrentSura(item.sura);
+                        setCurrentAya(item.aya);
+                        setActiveAya(`${item.sura}${item.aya}`);
                         setAyeSuraAudio(
                           `${
                             item.sura < 10
@@ -492,12 +492,11 @@ export default function Page({ params }: any) {
                 src={`https://tanzil.net/res/audio/${autherAudio}/${AyeSuraAudio}.mp3`}
                 onEnded={handleEnded}
                 autoPlay
-                showJumpControls={false} 
-                customAdditionalControls={[]} 
-                customControlsSection={["MAIN_CONTROLS"]} 
-                customProgressBarSection={[]} 
-                layout="horizontal-reverse" 
-                className="w-48  border-none"
+                showJumpControls={false}
+                customAdditionalControls={[]}
+                customProgressBarSection={[]}
+                layout="horizontal-reverse"
+                className="w-48 border-none"
               />
             </span>
             <div className="cursor-pointer">
