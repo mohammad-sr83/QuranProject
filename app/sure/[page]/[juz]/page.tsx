@@ -1,18 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import AudioPlayer from "react-h5-audio-player"; 
+import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import { useRouter } from "next/navigation";
 import { changeTheme } from "@/app/components/Them/hederthems";
 import Link from "next/link";
+import "./quranpage.css";
 import useFeth from "@/app/_lib/api/FethData";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "./quranpage.css";
 import "swiper/css";
 import MenuSuraAye from "@/app/components/Navbar/Menu/MenuSuraAye";
 import { setCookie } from "cookies-next";
-
 
 export default function Page({ params }: any) {
   const [menuBar, setMenuBar] = useState(false);
@@ -22,7 +20,7 @@ export default function Page({ params }: any) {
   const [isShowAuther, setShowAuther] = useState(false);
   const [auther, setAuther] = useState("الغسانی");
   const [autherAudio, setAutherAudio] = useState("afasy");
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(1.00);
   const [page, setPage] = useState<number | null>(null);
   const [juzSure, setJuzsura] = useState<number | null>(null);
   const [nameSure, setNamesura] = useState<string | null>(null);
@@ -34,15 +32,13 @@ export default function Page({ params }: any) {
   const [datakol, setDatakol] = useState<any[]>([]);
   const [packsura, setpacksura] = useState(0);
   const [data, pageSure] = useFeth(params.page, params.juz);
-  const swiperRef = useRef<any>(null);
   const [initialSlide, setInitialSlide] = useState(0);
   const [AyeSuraAudio, setAyeSuraAudio] = useState<string>("");
   const [currentSura, setCurrentSura] = useState(0);
   const [currentAya, setCurrentAya] = useState(0);
-  const [activeAya, setActiveAya] = useState('00');
+  const [activeAya, setActiveAya] = useState("00");
   const [activeindex, setactiveindex] = useState(0);
   let FinsIndex;
-  let allSlides;
   useEffect(() => {
     setDatakol(
       pageSure?.map((item: any) => data?.filter((ite: any) => ite.page == item))
@@ -132,7 +128,7 @@ export default function Page({ params }: any) {
   const handleSlideChange = (swiper: any) => {
     const totalSlides = swiper.slides.length;
     const currentIndex = swiper.activeIndex;
-    setactiveindex(swiper.activeIndex)
+    setactiveindex(swiper.activeIndex);
     const firstItem = datakol[currentIndex][0];
     if (firstItem) {
       const newUrl = `/sure/${firstItem.sura}/${firstItem.aya}`;
@@ -167,16 +163,13 @@ export default function Page({ params }: any) {
     );
     setActiveAya(`${currentSura}${currentAya}`);
   }, [currentSura, currentAya]);
-  if (activeindex>0) {
-    console.log(datakol[activeindex]);
-  }
   const handleEnded = () => {
     // پیدا کردن آیه بعدی
 
     const currentSuraIndex = datakol[activeindex].findIndex(
-      (items:any) => items.sura === currentSura
+      (items: any) => items.sura === currentSura
     );
-    
+
     const currentAyaIndex = datakol[activeindex].findIndex(
       (item: any) => item.aya === currentAya
     );
@@ -240,20 +233,20 @@ export default function Page({ params }: any) {
               </button>
               <div className="flex justify-between items-center flex-row w-1/2">
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
-                  <div className="number_Soreh h-10 w-10 flex justify-center items-center">
+                  <div className="number_Soreh font-almarai-bold h-10 w-10 flex justify-center items-center">
                     {juzSure}
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
                   <Link
                     href=""
-                    className="Soreh h-20 w-20 text-typography flex justify-evenly items-center"
+                    className="Soreh h-20 w-20 text-white font-uthmani flex justify-evenly items-center"
                   >
                     {nameSure}
                   </Link>
                 </div>
                 <div className="flex items-center space-x-3 pr-3 lg:pr-7 xl:pr-7">
-                  <div className="number_Soreh h-10 w-10 flex justify-center items-center">
+                  <div className="number_Soreh h-10 font-almarai-bold font-normal w-10 flex justify-center items-center">
                     {page}
                   </div>
                 </div>
@@ -304,7 +297,7 @@ export default function Page({ params }: any) {
                   <span key={item.index}>
                     {item.aya == 1 && (
                       <span>
-                        <div className="nameSoreh flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
+                        <div className="nameSoreh font-uthmani flex justify-center w-full h-10 text-center text-3xl pb-3 text-white mt-1 ">
                           {item.sura_name}
                         </div>
                         <div className="besm mb-6 "></div>
@@ -316,7 +309,6 @@ export default function Page({ params }: any) {
                         setCurrentSura(item.sura);
                         setCurrentAya(item.aya);
                         setActiveAya(`${item.sura}${item.aya}`);
-                        
                       }}
                       onMouseMove={() => {
                         setCookie("lastSure", `${String(item.sura)}`);
@@ -343,7 +335,7 @@ export default function Page({ params }: any) {
                           : ""
                       }`}
                     >
-                      <span>
+                      <span className="font-uthmani">
                         {item.aya == 1
                           ? item.text?.replace(
                               "بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ",
@@ -429,7 +421,7 @@ export default function Page({ params }: any) {
                 </ul>
               )}
               <div
-                className=" fixed bottom-3 mr-2"
+                className=" fixed bottom-4 mr-2"
                 onClick={() => {
                   setIsShow(!isShow);
                   setShowAuther(false);
@@ -484,8 +476,9 @@ export default function Page({ params }: any) {
                 onEnded={handleEnded}
                 showJumpControls={false}
                 customProgressBarSection={[]}
+                customAdditionalControls={[]}
+                customVolumeControls={[]}
                 layout="horizontal-reverse"
-                className="w-48 border-none"
               />
             </span>
             <div className="cursor-pointer">
@@ -498,7 +491,7 @@ export default function Page({ params }: any) {
                     }}
                     className={`${
                       auther == "پرهیزکار" && "bg-orange-500"
-                    }  bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
+                    }  bg-blue-300 rounded-3xl mb-3 w-auto flex font-uthmani text-[25px] justify-center items-center hover:bg-blue-200`}
                   >
                     پرهیزکار
                   </button>
@@ -509,7 +502,7 @@ export default function Page({ params }: any) {
                     }}
                     className={`${
                       auther == "عبدالواسط" && "bg-orange-500"
-                    } bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
+                    } bg-blue-300 rounded-3xl mb-3 font-uthmani text-[25px] w-auto flex justify-center items-center hover:bg-blue-200`}
                   >
                     عبدالواسط
                   </button>
@@ -520,7 +513,7 @@ export default function Page({ params }: any) {
                     }}
                     className={`${
                       auther == "المنشاوي" && "bg-orange-500"
-                    }  bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
+                    }  bg-blue-300 rounded-3xl font-uthmani text-[25px] mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
                   >
                     المنشاوی
                   </button>
@@ -531,7 +524,7 @@ export default function Page({ params }: any) {
                     }}
                     className={`${
                       auther == "الغسانی" && "bg-orange-500"
-                    } bg-blue-300 rounded-3xl mb-3 w-auto flex justify-center items-center hover:bg-blue-200`}
+                    } bg-blue-300 rounded-3xl mb-3 font-uthmani text-[25px] w-auto flex justify-center items-center hover:bg-blue-200`}
                   >
                     الغسانی
                   </button>
@@ -543,7 +536,7 @@ export default function Page({ params }: any) {
                   setIsShow(false);
                   setIsShowSpeed(false);
                 }}
-                className="cursor-pointer font-bold "
+                className="cursor-pointer font-bold font-uthmani text-[25px] "
               >
                 {auther}
               </span>

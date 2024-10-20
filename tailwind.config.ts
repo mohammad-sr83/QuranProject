@@ -13,6 +13,12 @@ const config: Config = {
         primary: 'var(--color-primary)',
         typography: 'var(--color-typography)',
       },
+      fontFamily: {
+        'almarai-bold': ['AlmaraiBold', 'sans-serif'], // فونت جایگزین اضافه شده
+        'extra-bold': ['ExtraBold', 'sans-serif'],
+        'uthmani-number': ['uthmaninumber', 'sans-serif'], // نام مناسب تر
+        'uthmani': ['uthmani', 'sans-serif'],
+      },
     },
   },
   plugins: [],

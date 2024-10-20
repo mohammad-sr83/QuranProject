@@ -1,94 +1,18 @@
-.Soreh {
-    background-image: url(../../../../public/image/sura-name-container-light.svg);
-    background-position: center;
-    height: 100px;
-    background-size: 100% 100%;
-    font-weight: bolder;
-    text-decoration: none;
-    background-repeat: no-repeat;
+.rhap_main {
+  border: none !important; /* حذف حاشیه */
 }
 
-.number_Soreh {
-    background-image: url(../../../../public/image/number-header-light.svg);
-    background-position: center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+.rhap_main-controls-button{
+  background-color: white !important; /* رنگ دلخواه برای دکمه پخش */
+  color: rgb(108, 97, 255) !important; /* رنگ متن */
 }
 
-.besm {
-    height: 42px;
-    background-image: url(../../../../public/image/besm-allah-light.svg);
-    background-position: center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+.rhap_container{
+  padding: 0;
+  line-height: 0;
 }
-
-.nameSoreh {
-    background-image: url(../../../../public/image/sura-title-light.svg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+@media (min-width: 1024px) {
+  .lg\:p-10 {
+    padding: 0;
+  }
 }
-.Aya_soreh{
-    background-image: url(../../../../public/image/Ayah.svg);
-    background-position: center;
-    margin-right: 2px;
-    margin-left: 2px;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-.rhap_progress-bar {
-   
-    position: relative;
-    z-index: 0;
-    width: 100%;
-    height: 5px;
-    background-color: #dddddd;
-  }
-  
-.rhap_container {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    border: none;
-    font-family: inherit;
-    width: 100%;
-    padding: 10px 15px;
-    background-color: #fff;
-  }
-
-  
-  .rhap_progress-indicator {
-    box-sizing: border-box;
-    position: absolute;
-    z-index: 3;
-    width: 20px;
-    height: 20px;
-    margin-left: -10px;
-    top: -8px;
-    background: #ffffff;
-  }
-  .rhap_repeat-button {
-    font-size: 26px;
-    width: 26px;
-    height: 26px;
-    color: #7387fa;
-    /* margin-right: 6px; */
-  }
-  
-  .rhap_main-controls-button {
-    /* margin: 0 3px; */
-    color: #7387fa;
-    font-size: 35px;
-    width: 35px;
-    height: 35px;
-  }
-  .rhap_volume-button {
-    flex: 0 0 26px;
-    font-size: 26px;
-    width: 26px;
-    height: 26px;
-    color: #7387fa;
-    /* margin-right: 6px; */
-  }
-  
