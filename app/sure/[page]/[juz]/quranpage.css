@@ -1,18 +1,49 @@
 .rhap_main {
-  border: none !important; /* حذف حاشیه */
+  border: 0 !important; /* حذف حاشیه */
+  background-color: var(--color-menu);
 }
 
 .rhap_main-controls-button{
   background-color: white !important; /* رنگ دلخواه برای دکمه پخش */
-  color: rgb(108, 97, 255) !important; /* رنگ متن */
+  color: #308E9B !important; /* رنگ متن */
+  width: 60px;
+  height: 60px;
+}
+body.dark-mode .rhap_main-controls-button {
+  color: #ffffff  !important;
+}
+body.light-mode .rhap_main-controls-button{
+  color: #b4924d  !important;
 }
 
+
+.rhap_container svg {
+  vertical-align: initial;
+  width: 70px;
+  height: 60px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-menu);
+
+}
 .rhap_container{
   padding: 0;
   line-height: 0;
+  box-shadow: none;
+  border: 0;
 }
 @media (min-width: 1024px) {
   .lg\:p-10 {
     padding: 0;
   }
+  
+}
+
+.rhap_main rhap_horizontal-reverse{
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: white;
 }

@@ -7,13 +7,8 @@ export default function useFeth(sura:number,aya:number) {
 
     useEffect(() => {
         try {
-<<<<<<< HEAD
             const fetchdate = async (sura:number,aya:number) => {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/sure_aye/${sura}/${aya}`)
-=======
-            const fetchdate = async (params:string) => {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/sure_aye/${params}`)
->>>>>>> af80d5fccd54e46f102fe7baaed100949eedcd26
                 const dateJson = await response.json()
                 if (dateJson) {
                     const oo =dateJson?.pack.map((item:any)=>item.page)

@@ -1,4 +1,17 @@
 html[data-theme="theme1"] {
-    --color-primary: #584741;
-    --color-typography: #000;
+    --color-primary: #0a101a;
+    --color-typography: #fff;
+    --color-hover:rgba(68, 83, 89, 0.5098039216);
+    --color-menu:#0F1827;;
+    --color-joz:#0b121f;
+    --color-footer:#0F1827;;
+    --color-menubar:#0a101a;
+     --color-menubarTitlebg:#ECE4CA;
+    --color-menubarTextbg:#333333;
+    --color-menubartitle:#0C1F34;
+    --color-selectmenu:#ECE4CA;
+    --color-selectthem:#A28F76;
+    --color-title:#ffff;
+    --color-icons:#ffffff;
+    --color-titlenumber:#ffff;
 }

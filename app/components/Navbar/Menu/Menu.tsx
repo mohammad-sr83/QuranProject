@@ -12,49 +12,80 @@ export default function Menu() {
   const sure = quran.sura_list;
   const juz = QuranData.Juz;
   const page = QuranData.Page;
-
+  function convertToArabicNumber(number: number | null) {
+    const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return number
+      ?.toString()
+      .replace(/\d/g, (digit: any) => arabicDigits[digit]);
+  }
 
   return (
-    <div className='fixed transition-all z-20 ms:w-1/4 h-full flex border-t-0 pb-16 lg:w-1/4 md:w-1/4 w-full'>
-      <div className="menu flex flex-col bg-slate-100 lg:w-full md:w-full w-full dark:bg-slate-400">
-        <div className="flex justify-center items-center p-4">
-          <button className={`btn ${sure_list && 'active'} font-almarai-bold text-[16px]`} onClick={() => {
+    <div className='fixed transition-all z-20  h-full flex border-t-0 pb-16    md:w-1/2 lg:w-1/2 xl:w-1/4 w-full'>
+      <div className="menu flex flex-col bg-menubar p-4 lg:w-full md:w-full w-full dark:bg-slate-400">
+      <div className="flex justify-center gap-1 bg-menubar items-center p-7">
+          <button className={`btn ${sure_list ? 'bg-menubarTitlebg text-menubarTextbg':'bg-menubartitle'}  font-almarai text-[14px] rounded-sm lg:text-[16px] `} onClick={() => {
             setsure_list(true);
             sepage_list(false);
             setjus_list(false);
-          }}>سوره</button>
-          <button className={`btn ${page_list && 'active'} font-almarai-bold text-[16px]`} onClick={() => {
+          }}>السورة</button>
+          <button className={`btn ${page_list ? 'bg-menubarTitlebg text-menubarTextbg' :'bg-menubartitle'}  font-almarai text-[14px] rounded-sm lg:text-[16px]`} onClick={() => {
             setsure_list(false);
             sepage_list(true);
             setjus_list(false);
-          }}>صفحه</button>
-          <button className={`btn ${jus_list && 'active'} font-almarai-bold text-[16px]`} onClick={() => {
+          }}>الصفحة</button>
+          <button className={`btn ${jus_list ? 'bg-menubarTitlebg text-menubarTextbg':'bg-menubartitle'}  font-almarai text-[14px] rounded-sm lg:text-[16px]`} onClick={() => {
             setsure_list(false);
             sepage_list(false);
             setjus_list(true);
-          }}>جزو</button>
+          }}>الجزء</button>
         </div>
 
-        <div className='overflow-x-auto h-full p-5 bg-slate-100 parent'>
-          <div className="bg-slate-100 overflow-y-auto flex text-center justify-center flex-col">
-            {sure_list && sure.map((item) => (
-              <Link href={`../${item.sura}/1`} key={item.sura} onClick={() => setCookie('lastSure', `${item.sura}`)}
-                className={` h-13 hover:bg-slate-300 p-2 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
-                {item.sura}- {item.sura_name}
+        <div className='overflow-x-auto h-full p-5 bg-menubar parent'>
+          <div className="bg-menubar overflow-y-auto flex text-center justify-center flex-col">
+          {sure_list && sure.map((item) => (
+              <Link href={`/sure/${item.sura}/${1}`} key={item.sura} onClick={() => {
+                setCookie("lastaya", `${1}`, {
+                  sameSite: 'none',
+                  secure: true      
+                })
+                setCookie('lastSure', `${item.sura}`),{
+                  sameSite: 'none',
+                  secure: true      
+                }}}
+                className={` h-[50px] hover:bg-slate-300 p-2 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-typography border-b-2 border-black`}>
+                {convertToArabicNumber(item.sura)}- {item.sura_name}
               </Link>
             ))}
 
             {page_list && page.map((item,index) => (
-              <Link href={`/sure/${item[0]}/${item[1]}`} key={index} onClick={() => setCookie('lastSure', `${item}`)}
-                className={` h-13 p-2 hover:bg-slate-300 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
-                صفحه -{index+1}
+              <Link href={`/sure/${item[0]}/${item[1]}`} key={index} onClick={() => {
+                setCookie("lastaya", `${item[1]}`, {
+                  sameSite: 'none',
+                  secure: true      
+                })
+                setCookie('lastSure', `${item[0]}`),{
+                  sameSite: 'none',
+                  secure: true      
+                }}}
+                className={` h-[50px] p-2 hover:bg-slate-300 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-typography border-b-2 border-black`}>
+                الصفحة {convertToArabicNumber(index+1)}
               </Link>
             ))}
 
             {jus_list && juz.map((item,index) => (
               <Link href={`/sure/${item[0]}/${item[1]}`} key={index}
-                className={` h-13 p-2 hover:bg-slate-300 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-slate-600 border-b-2 border-black`}>
-                جزء-{index+1}
+                onClick={()=>{
+                  setCookie("lastaya", `${item[1]}`, {
+                    sameSite: 'none',
+                    secure: true      
+                  })
+                  setCookie('lastSure', `${item[0]}`),{
+                    sameSite: 'none',
+                    secure: true      
+                  }
+                }}
+                className={`h-[50px] p-2 hover:bg-slate-300 font-bold font-almarai-bold text-[16px] cursor-pointer flex items-center text-center pr-3 text-typography border-b-2 border-black`}>
+                الجزء {convertToArabicNumber(index+1)}
               </Link>
             ))}
           </div>

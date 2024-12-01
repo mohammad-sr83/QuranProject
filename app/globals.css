@@ -4,30 +4,43 @@
 
 @layer base {
   html {
-    --color-primary: #EEEEEE;
+    --color-primary: #EAF4F4;
     --color-typography: #000;
+    --color-hover:#c5e2e6;
+    --color-menu:#fff;
+    --color-joz:#c9c9c9;
+    --color-footer:#308e9b;
+    --color-menubar:#f1f5f9;
+    --color-menubarTitlebg:#308E9B;
+    --color-menubarTextbg:#EAF4F4;
+    --color-menubartitle:#c5e2e6;
+    --color-selectmenu:#a28f76;
+    --color-title:#ffff;
+    --color-icons:#333333;
+    --color-titlenumber:#333333;
   }
+
 
   @font-face {
     font-family: 'AlmaraiBold';
-    font-style: 'bold'; /* به جای bold، از normal استفاده کنید */
-    font-weight: 700; /* برای bold از 700 استفاده کنید */
+    font-style: 'bold'; 
+    font-weight: 700; 
     font-display: swap;
     src: url(/font/Almarai-Bold.woff2) format('woff2');
   }
 
   @font-face {
     font-family: 'ExtraBold';
-    font-style: normal; /* به جای bold، از normal استفاده کنید */
-    font-weight: 800; /* وزن extra bold معمولاً 800 است */
+    font-style: normal; 
+    font-weight: 800; 
     font-display: swap;
     src: url(/font/Almarai-ExtraBold.woff2) format('woff2');
   }
 
   @font-face {
     font-family: 'uthmaninumber';
-    font-style: normal; /* در صورت عادی بودن، از normal استفاده کنید */
-    font-weight: 500; /* وزن 500 برای فونت‌های متوسط (medium) */
+    font-style: normal;  
+    font-weight: 500; 
     font-display: swap;
     src: url(/font/uthmani-number.woff2) format('woff2');
   }
@@ -35,28 +48,61 @@
   @font-face {
     font-family: 'uthmani';
     font-style: normal;
-    font-weight: 200; /* وزن متوسط */
+    font-weight: 200; 
     font-display: swap;
     src: url(/font/uthmani.woff2) format('woff2');
   }
 
   @import 'Style/thems/thems1.css';
-  @import 'Style/thems/thems2.css'; /* مسیر درست و نقطه‌ویرگول در پایان */
+  @import 'Style/thems/thems2.css'; 
 }
-.number_Soreh {
+.logo-title{
+  background-image: url(/image/quran-logo-light.svg);
+  background-position: center;
+  background-size: 100%  100%;
+  background-repeat: no-repeat;
+  align-items: center;
+}
+body.dark-mode .logo-title{
+  background-image: url(/image/dark/quran-logo-dark.svg);
+}
+body.light-mode .logo-title{
+  background-image: url(/image/light/header-sepia.svg);
+}
+
+.numberSorehSoreh {
   background-image: url(/image/sura-number-light.svg);
   background-position: center;
   background-size: 100%  100%;
   background-repeat: no-repeat;
+  align-items: center;
+}
+body.dark-mode .numberSorehSoreh {
+  background-image: url(/image/dark/sura-number-dark.svg);
+}
+body.light-mode .numberSorehSoreh{
+  background-image: url(/image/light/sura-number-sepia.svg);
 }
 .image {
   background-image: url(/image/pattern-light.svg);
   background-position: center top;
 }
+body.dark-mode .image {
+  background-image: url(/image/dark/pattern-dark.svg);
+}
+body.light-mode .image{
+  background-image: url(/image/light/pattern-sepia.svg);
+}
 
 .Qoran {
   background-image: url(/image/quran-light.svg);
   background-position: center top;
+}
+body.dark-mode .Qoran {
+  background-image: url(/image/dark/quran-dark.svg);
+}
+body.light-mode .Qoran{
+  background-image: url(/image/light/quran-sepia.svg);
 }
 
 .last_Soreh {
@@ -68,28 +114,65 @@
   text-decoration: none;
   background-repeat: no-repeat;
 }
-.Soreh{
+body.light-mode .last_Soreh{
+  background-image: url(/image/light/go-to-sepia.svg);
+}
+.Soreh-header{
   background-image: url(/image/sura-name-container-light.svg);
   background-position: center;
-  height: 100px;
   background-size: 100% 100%;
   font-weight: bolder;
   text-decoration: none;
   background-repeat: no-repeat;
+  font-size: 2rem;
+  text-decoration: none;
+  color:#ffffff ;
 }
-.joze{
-  background-color:#c9c9c9;
+body.dark-mode .Soreh-header {
+  background-image: url(/image/dark/sura-name-header-dark.svg);
 }
+body.light-mode .Soreh-header{
+  background-image: url(/image/light/sura-name-header-sepia.svg);
+}
+
+.Soreh{
+  background-image: url(/image/sura-name-container-light.svg);
+  background-position: center;
+  background-size: 100% 100%;
+  font-weight: bolder;
+  text-decoration: none;
+  background-repeat: no-repeat;
+  font-size: 2rem;
+  text-decoration: none;
+  color:#ffffff ;
+}
+body.dark-mode .Soreh {
+  background-image: url(/image/dark/sura-name-container-dark.svg);
+  padding: 11px;
+}
+body.light-mode .Soreh{
+  background-image: url(/image/light/sura-name-container-sepia.svg);
+}
+
+
 .Joze_button{
   background-image: url(/image/go-to-light.svg);
   background-position: center;
   background-size: 100% 100%;
+  height: 70px;
   font-weight: bolder;
-  padding: 30px 0;
-  width: 25vw;
   text-decoration: none;
   background-repeat: no-repeat;
+  font-weight: bolder;
+  text-decoration: none;
+  background-repeat: no-repeat;
+  text-decoration: none;
+  color:#ffffff ;
 }
+body.light-mode .Joze_button{
+  background-image: url(/image/light/juz-name-container-sepia.svg);
+}
+
 .menu{
   transform: translate(0, 3);
   box-shadow: 0 0 24px 12px rgba(0, 0, 0, 0.24);
@@ -97,13 +180,11 @@
   
 }
 .btn{
-  border: 2px solid #EAF4F4;
   outline: none;
   padding: 7px 0;
   display: block;
   width: 100%;
   cursor: pointer;
-  background-color: #c5e2e6;
   transition: all 50ms;
   font-size: 1.2rem;
   font-weight: bold;
@@ -120,24 +201,58 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
-
+body.dark-mode .besm{
+  background-image: url(/image/dark/besm-allah-dark.svg);
+}
+.more{
+  background-image: url(/image/three-dots-light.svg);
+  height: 30px;
+  width: 30px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
 .nameSoreh {
   background-image: url(/image/sura-title-light.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  font-size: 2.5rem;
+  text-decoration: none;
+  color:#ffffff ;
 }
-.Aya_soreh{
-  background-image: url(/image/Ayah.svg);
+body.dark-mode .nameSoreh {
+  background-image: url(/image/dark/sura-name-title-dark.svg);
+  padding: 11px;
+}
+body.light-mode .nameSoreh{
+  background-image: url(/image/light/sura-name-title-sepia.svg);
+}
+
+.Changethem{
+  background-image: url(/image/font-setting-light.svg);
   background-position: center;
-  margin-right: 2px;
-  margin-left: 2px;
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+body.dark-mode .Changethem {
+  background-image: url(/image/dark/font-setting-dark.svg);
+  padding: 11px;
+}
+
 .number_Soreh {
   background-image: url(/image/number-header-light.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  font-size: 1.5rem;
+}
+
+body.dark-mode .number_Soreh {
+  background-image: url(/image/dark/number-header-dark.svg);
+  padding: 11px;
+}
+body.light-mode .number_Soreh{
+  background-image: url(/image/light/number-header-sepia.svg);
+  padding: 11px;
 }

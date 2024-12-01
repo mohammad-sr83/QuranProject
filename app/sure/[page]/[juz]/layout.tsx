@@ -5,6 +5,9 @@
 export  const metadata = {
     title: "Quaran-Play",
     description: "Quaran Play page ",
+    icons: {
+      icon: '/image/quran-logo-light.svg',
+    },
   };
 
 export default function layout({children}:{children:React.ReactNode}) {

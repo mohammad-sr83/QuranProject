@@ -1,0 +1,16 @@
+html[data-theme="theme"] {
+    --color-primary: #EAF4F4;
+    --color-typography: #000;
+    --color-hover:#c5e2e6;
+    --color-menu:#fff;
+    --color-joz:#c9c9c9;
+    --color-footer:#308e9b;
+    --color-menubar:#f1f5f9;
+    --color-menubarTitlebg:#308E9B;
+    --color-menubarTextbg:#EAF4F4;
+    --color-menubartitle:#c5e2e6;
+    --color-selectmenu:#a28f76;
+    --color-title:#ffff;
+    --color-titlenumber:#333333;
+    --color-icons:#333333;
+}
